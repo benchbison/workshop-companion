@@ -2132,11 +2132,12 @@ function renderTerms() {
 function renderTD(id) {
   const t = T.find(x => x.id === id); if (!t) return;
   let def = t.def;
-  T.forEach(o => {
-    if (o.id !== id) def = def.replace(
-      new RegExp('\\b(' + o.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')\\b', 'gi'),
-      `<span class="tl" onclick="go('term-detail',{id:'${o.id}'})">$1</span>`
-    );
+  [...T].sort((a,b) => b.name.length - a.name.length).forEach(o => {
+    if (o.id === id) return;
+    try {
+      const pat = new RegExp('\b(' + o.name.replace(/[.*+?^${}()|[\]\\]/g,'\$&') + ')\b','gi');
+      def = def.replace(pat, `<span class="tl" onclick="go('term-detail',{id:'${o.id}'})">$1</span>`);
+    } catch(e) {}
   });
   const tagHtml = t.tags.map(tag =>
     `<span class="tn" onclick="go('terms',{f:'${tag.f}'})">Filter: ${tag.l}</span>`
