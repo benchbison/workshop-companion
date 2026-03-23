@@ -47,10 +47,14 @@ body{font-family:var(--ss);background:var(--cr);color:var(--ink);font-size:16px;
 #nh{background:var(--ph);padding:14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 #nh h3{font-family:var(--sf);font-size:16px;color:white;}
 #cn{background:none;border:none;color:white;cursor:pointer;font-size:20px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;}
-#na{flex:1;padding:12px;overflow-y:auto;}
-#nt{width:100%;height:100%;min-height:180px;background:transparent;border:none;font-family:var(--ss);font-size:14px;line-height:1.7;color:var(--ink);resize:none;outline:none;}
-#ns{margin:0 12px 12px;background:var(--ph);color:white;border:none;border-radius:10px;padding:10px;font-family:var(--ss);font-size:14px;font-weight:500;cursor:pointer;width:calc(100% - 24px);}
-#nsm{text-align:center;font-size:12px;color:var(--pm);padding-bottom:6px;opacity:0;transition:opacity 0.3s;}
+#nj-editor{display:none;flex-direction:column;flex:1;overflow:hidden;}
+#nj-list-view{display:flex;flex-direction:column;flex:1;overflow:hidden;}
+.nj-entry{padding:11px 14px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background 0.1s;}
+.nj-entry:hover{background:var(--pp);}
+.nj-entry:last-child{border-bottom:none;}
+.nj-entry-date{font-size:11px;color:var(--il);margin-bottom:3px;font-weight:600;letter-spacing:0.04em;}
+.nj-entry-preview{font-size:13px;color:var(--ink);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nj-empty{padding:28px 14px;text-align:center;font-size:13px;color:var(--il);line-height:1.6;}
 #ov{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:150;display:none;}
 #ov.active{display:block;}
 .pg{display:none;padding-bottom:56px;}
@@ -284,10 +288,33 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
 </nav>
 
 <aside id="np">
-  <div id="nh"><h3>Workshop Notes</h3><button id="cn">&#10005;</button></div>
-  <div id="na"><textarea id="nt" placeholder="Measurements, ideas, reminders..."></textarea></div>
-  <p id="nsm">Saved.</p>
-  <button id="ns">Save Notes</button>
+  <div id="nh">
+    <h3>Workshop Notes</h3>
+    <button id="cn" aria-label="Close notes">&#10005;</button>
+  </div>
+  <!-- Entry editor (shown when editing) -->
+  <div id="nj-editor" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+    <div id="nj-editor-meta" style="padding:8px 12px 4px;font-size:11px;color:rgba(255,255,255,0.5);flex-shrink:0"></div>
+    <div style="flex:1;padding:0 12px;overflow-y:auto">
+      <textarea id="nj-body" placeholder="Measurements, observations, ideas..." style="width:100%;height:100%;min-height:180px;background:transparent;border:none;font-family:var(--ss);font-size:14px;line-height:1.7;color:var(--ink);resize:none;outline:none;padding:8px 0"></textarea>
+    </div>
+    <div style="padding:8px 12px;display:flex;gap:8px;flex-shrink:0;border-top:1px solid var(--bd)">
+      <button id="nj-save" style="flex:1;background:var(--ph);color:white;border:none;border-radius:8px;padding:9px;font-family:var(--ss);font-size:13px;font-weight:600;cursor:pointer">Save</button>
+      <button id="nj-delete" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">Delete</button>
+      <button id="nj-back" style="background:transparent;color:var(--il);border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">← Back</button>
+    </div>
+    <p id="nj-saved-msg" style="text-align:center;font-size:11px;color:var(--pm);padding:4px 0 6px;opacity:0;transition:opacity 0.3s">Saved.</p>
+  </div>
+  <!-- Entry list (shown when browsing) -->
+  <div id="nj-list-view" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div style="padding:10px 12px 8px;flex-shrink:0">
+      <button id="nj-new" style="width:100%;background:var(--ph);color:white;border:none;border-radius:8px;padding:10px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer">+ New Entry</button>
+    </div>
+    <div id="nj-list" style="flex:1;overflow-y:auto;padding:0 0 8px"></div>
+    <div style="padding:8px 12px;border-top:1px solid var(--bd);flex-shrink:0">
+      <button id="nj-export" style="width:100%;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">Export All Notes</button>
+    </div>
+  </div>
 </aside>
 <div id="ov"></div>
 
@@ -326,7 +353,7 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
     <div class="hg-rows">
       <div class="home-row" onclick="go('terms')"><div class="hr-icon" style="color:#2D6B57"><svg width="17" height="17"><use href="#i-book"/></svg></div><div class="hr-text"><div class="hr-name">Terms</div><div class="hr-desc">Kerf, grain, mortise, tearout and more</div></div><span class="hr-arr">›</span></div>
       <div class="home-row" onclick="go('tools')"><div class="hr-icon" style="color:#2D6B57"><svg width="17" height="17"><use href="#i-tool"/></svg></div><div class="hr-text"><div class="hr-name">Tools</div><div class="hr-desc">Hand and power tools — use, ease, technique</div></div><span class="hr-arr">›</span></div>
-      <div class="home-row" onclick="go('wood')"><div class="hr-icon" style="color:#2D6B57"><svg width="17" height="17"><use href="#i-tree"/></svg></div><div class="hr-text"><div class="hr-name">Wood Species</div><div class="hr-desc">22 species — Janka, food safety, workability</div></div><span class="hr-arr">›</span></div>
+      <div class="home-row" onclick="go('wood')"><div class="hr-icon" style="color:#2D6B57"><svg width="17" height="17"><use href="#i-tree"/></svg></div><div class="hr-text"><div class="hr-name">Wood Species</div><div class="hr-desc">Janka hardness, food safety, workability, region</div></div><span class="hr-arr">›</span></div>
       <div class="home-row" onclick="go('sawmill')"><div class="hr-icon" style="color:#2D6B57"><svg width="17" height="17"><use href="#i-lumber"/></svg></div><div class="hr-text"><div class="hr-name">Sawmill Terms</div><div class="hr-desc">S4S, rough-sawn, quartersawn, board foot</div></div><span class="hr-arr">›</span></div>
       <div class="home-row" onclick="go('joinery')"><div class="hr-icon" style="color:#2D6B57"><svg width="17" height="17"><use href="#i-joint"/></svg></div><div class="hr-text"><div class="hr-name">Joinery</div><div class="hr-desc">Mortise and tenon, dovetails, dados, pocket screws</div></div><span class="hr-arr">›</span></div>
       <div class="home-row" onclick="go('hardware')"><div class="hr-icon" style="color:#2D6B57"><svg width="17" height="17"><use href="#i-hardware"/></svg></div><div class="hr-text"><div class="hr-name">Hardware &amp; Fasteners</div><div class="hr-desc">Screws, hinges, drawer slides, pulls, knockdown</div></div><span class="hr-arr">›</span></div>
@@ -609,8 +636,8 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
     </div>
 
     <div class="ds">
-      <h3>Notes panel</h3>
-      <p>Tap the <strong>notebook icon</strong> (top right, next to search) to open the notes panel. Type anything — measurements, project ideas, shopping lists. Hit <strong>Save Notes</strong> to persist them in your browser. Notes survive closing and reopening the app on the same device.</p>
+      <h3>Workshop Notes</h3>
+      <p>Tap the <strong>notebook icon</strong> (top right, next to search) to open the notes panel. Tap <strong>+ New Entry</strong> to create a timestamped journal entry — write measurements, observations, project notes, or anything else. Entries are saved automatically as you type and sorted newest-first. Tap any entry to reopen and edit it. Use <strong>Export All Notes</strong> to copy everything to your clipboard for safekeeping. Notes are stored on this device only — they do not sync across devices.</p>
     </div>
 
 
@@ -675,7 +702,7 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
 
     <div class="ds">
       <h3>Disclaimer</h3>
-      <p style="font-size:13px;color:var(--im);line-height:1.7">This app provides general woodworking reference information for educational purposes only. It is not a substitute for professional training or advice. Content is provided as-is with no warranty of accuracy. The AI identification feature produces estimates only — never rely solely on AI identification for food-safety or safety-critical decisions. Use of this app is at your own risk.</p>
+      <p style="font-size:13px;color:var(--im);line-height:1.7">This app provides general woodworking reference information for educational purposes only. It is not a substitute for professional training or advice. Content is provided as-is with no warranty of accuracy or completeness. Use of this app is at your own risk.</p>
     </div>
     <div class="ds">
       <h3>Support the work</h3>
@@ -924,7 +951,6 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
       <ul style="padding-left:18px;margin-bottom:10px">
         <li style="margin-bottom:6px">Woodworking involves sharp tools, machinery, and materials that can cause serious injury. Always follow safe practices.</li>
         <li style="margin-bottom:6px">Content is provided as-is with no warranty of accuracy, completeness, or fitness for any particular purpose.</li>
-        <li style="margin-bottom:6px">The AI wood and tool identification feature produces <strong>estimates only</strong>. Never rely solely on AI identification for food-safety decisions.</li>
         <li style="margin-bottom:6px">Bench &amp; Bison Workshop is not liable for injury, property damage, or loss resulting from use of this information.</li>
       </ul>
       <p style="font-size:12px;color:#6B6B64">
@@ -985,9 +1011,171 @@ const WOOD=[
   {id:'walnut',name:'American Black Walnut',type:'hardwood',region:'na',janka:1010,food:true,short:'Rich, dark -- the American furniture wood',desc:'Black walnut is the prestige wood of American furniture making. Deep chocolate brown heartwood, relatively easy to work.',work:'Generally easy with hand tools and power tools. Sawdust is a mild irritant -- dust mask recommended.',finish:'Oils bring out the depth. Danish oil, tung oil, or paste wax all work beautifully.',dry:'Dries well but can be slow.',uses:'Furniture, cabinetry, gunstocks, carvings, cutting boards'},
   {id:'maple',name:'Hard Maple',type:'hardwood',region:'na',janka:1450,food:true,short:'Dense, pale, and resilient -- the benchmark hardwood for work surfaces',desc:'Hard maple is the workbench and butcher block wood -- dense, tight-grained, and resistant to wear.',work:'Harder to work by hand than cherry or walnut. Requires very sharp tools.',finish:'Takes all finishes well. Can blotch with oil stains -- use a conditioner first.',dry:'Dries relatively slowly. Prone to surface checking.',uses:'Workbenches, butcher blocks, cutting boards, tool handles, flooring'},
   {id:'basswood',name:'Basswood',type:'hardwood',region:'na',janka:410,food:true,short:'Soft hardwood ideal for carving and prototyping',desc:"Basswood is technically a hardwood but softer than many softwoods. Its fine, even grain makes it the go-to wood for carving.",work:'Carves exceptionally well in all directions. Planes easily.',finish:'Takes paint and gesso extremely well.',dry:'Dries quickly and easily.',uses:'Carving, sculpture, prototyping, model making, painted pieces'},
-  {id:'pine',name:'Eastern White Pine',type:'softwood',region:'na',janka:380,food:true,short:'Classic softwood -- easy to work, historically important',desc:'Eastern white pine was the timber of early American settlement. Light, straight-grained, easy to work.',work:'Easy to work by hand or machine.',finish:'Paints and primes well. A shellac sealer coat produces more even topcoat results.',dry:'Dries quickly.',uses:'Construction, painted furniture, shop fixtures, jigs, boxes'},
   {id:'ash',name:'White Ash',type:'hardwood',region:'na',janka:1320,food:true,short:'Tough, flexible, ring-porous -- the tool handle wood',desc:'White ash is the traditional wood for tool handles due to its exceptional shock resistance and flexibility.',work:'Works well with hand tools and machines.',finish:'Takes stain and oil well. Open pores need filling for a mirror-smooth finish.',dry:'Dries without significant difficulty.',uses:'Tool handles, sports equipment, furniture, steam-bent work'},
   {id:'european-oak',name:'European Oak',type:'hardwood',region:'eu',janka:1360,food:true,short:'The old-world equivalent to white oak',desc:'European oak shares many properties with white oak: high tannin content, tight grain, excellent durability.',work:'Similar to white oak. Works well with hand tools and power tools.',finish:'Oil and wax are the traditional choices.',dry:'Needs careful drying. Historically air-dried for years.',uses:'Fine furniture, cooperage, timber framing, flooring'},
+
+  {id:'red-oak',name:'Red Oak',type:'hardwood',region:'na',janka:1290,food:true,
+   short:'The most common American hardwood — open-grained, strong, widely available',
+   desc:'Red oak is the most commercially available hardwood in North America. Strong, relatively easy to work, and inexpensive. Unlike white oak, its open pores make it less suitable for outdoor use and cooperage.',
+   work:'Works well with hand tools and machines. Open grain requires a grain filler for a smooth film finish.',
+   finish:'Takes stain extremely well and evenly — one of the best species for staining. Open grain needs filling for film finishes.',
+   dry:'Dries moderately well. Prone to checking at the ends if not sealed promptly.',
+   uses:'Furniture, cabinetry, flooring, millwork — the workhorse of American production furniture'},
+  {id:'birch',name:'Yellow Birch',type:'hardwood',region:'na',janka:1260,food:true,
+   short:'Fine-grained, pale, strong — a good substitute for maple at lower cost',
+   desc:'Yellow birch is a fine-grained, light-colored hardwood similar to hard maple but typically less expensive. Commonly used for painted furniture and cabinet interiors.',
+   work:'Works well with hand tools and machines. Similar to maple — requires sharp tools. Prone to blotching with stain.',
+   finish:'Paints exceptionally well. For natural finishes, use a wood conditioner first. Takes oil and film finishes well once conditioned.',
+   dry:'Dries without major difficulty.',
+   uses:'Furniture, cabinet interiors, plywood face veneers, painted pieces, turned objects'},
+  {id:'hickory',name:'Shagbark Hickory',type:'hardwood',region:'na',janka:1820,food:true,
+   short:'The hardest and toughest common American hardwood — the tool handle wood',
+   desc:'Hickory is among the hardest and toughest North American hardwoods. Its combination of hardness, strength, and flexibility makes it the premier wood for tool handles.',
+   work:'Difficult to work by hand — very tough on cutting edges. Machines well but dulls blades quickly.',
+   finish:'Takes stain and oil well.',
+   dry:'Must be dried carefully — prone to checking. End seal promptly.',
+   uses:'Tool handles (axes, hammers, mauls), sports equipment, ladders'},
+  {id:'cedar',name:'Western Red Cedar',type:'softwood',region:'na',janka:350,food:false,
+   short:'Aromatic, rot-resistant, lightweight — the outdoor and storage wood',
+   desc:'Western red cedar is exceptionally rot-resistant, aromatic, and lightweight. Its natural oils repel insects and moisture, making it the standard for exterior applications and storage chests.',
+   work:'Very easy to work by hand and machine. Extremely soft — dents easily. Grain is often irregular.',
+   finish:'Weathers naturally to silver-gray without finish. For maintained color, use an exterior oil. Tannins can bleed through water-based finishes — use shellac primer.',
+   dry:'Dries quickly and easily with minimal checking.',
+   uses:'Exterior siding, decking, fence posts, hope chests, closet lining, outdoor furniture'},
+  {id:'douglas-fir',name:'Douglas Fir',type:'softwood',region:'na',janka:660,food:true,
+   short:'Strong structural softwood — the standard for construction timber and shop fixtures',
+   desc:'Douglas fir is the most commonly used structural softwood in North America. Significantly stronger than most softwoods, with a tight straight grain when quartersawn.',
+   work:'Works well with hand tools and machines. Resinous — can clog saw blades. Quartersawn fir shows beautiful ray fleck.',
+   finish:'Paints and stains well. Knots may bleed resin — seal with shellac before painting.',
+   dry:'Dries relatively easily but can be prone to checking.',
+   uses:'Construction framing, shop workbenches, shelving, jigs, flooring'},
+  {id:'teak',name:'Teak',type:'hardwood',region:'asia',janka:1155,food:false,
+   short:'The outdoor furniture standard — oily, dense, extremely weather-resistant',
+   desc:'Teak is one of the most weather-resistant hardwoods in the world. Its natural oils protect it from moisture, insects, and decay even without finish.',
+   work:'Difficult — silica content dulls cutting edges rapidly. Wipe surfaces with acetone before gluing — natural oils prevent adhesion.',
+   finish:'Needs no finish for outdoor use. For indoor use, Danish oil maintains appearance after an acetone wipe.',
+   dry:'Imported teak is typically kiln-dried.',
+   uses:'Outdoor and marine furniture, boat decking, garden furniture, flooring'},
+  {id:'poplar',name:'Tulip Poplar',type:'hardwood',region:'na',janka:540,food:true,
+   short:'Soft hardwood ideal for painted furniture, shop jigs, and secondary wood',
+   desc:'Tulip poplar is technically a hardwood but softer and lighter than most. Inexpensive, widely available, dimensionally stable, and takes paint exceptionally well.',
+   work:'Very easy to work by hand and machine. Green-tinged streaks are normal and disappear under paint.',
+   finish:'Paints and primes better than almost any other wood. Takes stain unevenly.',
+   dry:'Dries quickly with minimal movement.',
+   uses:'Painted furniture, shop jigs, drawer boxes, cabinet backs and interiors'},
+  {id:'black-locust',name:'Black Locust',type:'hardwood',region:'na',janka:1700,food:true,
+   short:'Extremely rot-resistant domestic hardwood — stronger than white oak for outdoor use',
+   desc:'Black locust is one of the most rot-resistant domestic hardwoods — more durable than teak in ground contact. Available from regional sawmills.',
+   work:'Hard and dense — requires sharp tools. Grain can be interlocked.',
+   finish:'Takes oil and film finishes well. Fresh yellow-green color fades to tan with UV exposure.',
+   dry:'Must be dried carefully — rapid drying causes severe checking. End seal immediately.',
+   uses:'Outdoor furniture, fence posts, turned objects, replacement for tropical hardwoods outdoors'},
+  {id:'soft-maple',name:'Soft Maple',type:'hardwood',region:'na',janka:950,food:true,
+   short:'More workable and less expensive than hard maple — good for painted or stained furniture',
+   desc:'Soft maple (silver maple, red maple, bigleaf maple) is significantly easier to work than hard maple but still a true hardwood. Widely used for painted furniture.',
+   work:'Works well with hand tools and machines. Much more forgiving than hard maple.',
+   finish:'Takes paint beautifully. Stains can blotch — use a conditioner first.',
+   dry:'Dries well with minimal checking.',
+   uses:'Painted furniture, cabinet boxes, turnings, butcher blocks'},
+  {id:'beech',name:'European Beech',type:'hardwood',region:'eu',janka:1300,food:true,
+   short:'Dense, fine-grained — the traditional European workbench and tool handle wood',
+   desc:'Beech is the traditional European workbench wood used for Roubo and Nicholson benches. Dense, hard, and affordable in European markets.',
+   work:'Works well with hand tools. Harder than cherry, easier than hard maple. Steam-bends exceptionally well.',
+   finish:'Takes stain and oil evenly. Notable ray fleck on quartersawn surfaces.',
+   dry:'Must be dried carefully. High shrinkage — prone to checking and movement.',
+   uses:'Workbenches, tool handles, chairs (steam-bent parts), flooring, turned objects'},
+  {id:'sycamore',name:'American Sycamore',type:'hardwood',region:'na',janka:770,food:true,
+   short:'Striking ray fleck on quartersawn stock — the lacewood of North America',
+   desc:'American sycamore is notable for its spectacular ray fleck on quartersawn surfaces — broader and more dramatic than oak. Often called lacewood in this cut.',
+   work:'Moderately difficult — interlocked grain requires sharp tools and care in planing direction.',
+   finish:'Takes stain and oil well. Quartersawn surfaces are stunning under an oil finish.',
+   dry:'Prone to warping and checking. Must be dried carefully.',
+   uses:'Decorative panels, musical instruments, furniture accents, butcher blocks'},
+  {id:'butternut',name:'Butternut (White Walnut)',type:'hardwood',region:'na',janka:490,food:true,
+   short:'Soft, light-colored walnut relative — easy to carve and work, warm tan color',
+   desc:'Butternut is the softer relative of black walnut. Warm tan color, coarse grain, easy to work. Increasingly rare due to butternut canker disease.',
+   work:'Very easy to work by hand — one of the most pleasant carving woods.',
+   finish:'Takes oil finishes beautifully. Warm color deepens with UV exposure similar to walnut.',
+   dry:'Dries easily with low movement.',
+   uses:'Carving, furniture, interior millwork, musical instruments'},
+  {id:'osage-orange',name:'Osage Orange',type:'hardwood',region:'na',janka:2040,food:false,
+   short:'One of the hardest and most rot-resistant North American woods — brilliant yellow-orange color',
+   desc:'Osage orange is extraordinarily hard, heavy, and rot-resistant. The brilliant yellow-green freshly cut color fades to deep orange-brown with UV exposure.',
+   work:'Very difficult. Dulls tools rapidly. Cuts cleanly when tools are sharp.',
+   finish:'The natural color is the finish. Oil enhances the deep orange.',
+   dry:'Dries slowly. Must be sealed promptly to prevent checking.',
+   uses:'Tool handles, fence posts, archery bows, turned objects, knife handles'},
+  {id:'white-pine',name:'Eastern White Pine',type:'softwood',region:'na',janka:380,food:true,
+   short:'The original American softwood — easy to work, historically important, widely available',
+   desc:'Eastern white pine was the foundational softwood of American construction and furniture history. Light, straight-grained, easy to work with any tool.',
+   work:'Cuts and planes easily. Resins can build up on saw blades — clean periodically with mineral spirits.',
+   finish:'Paints exceptionally well with a shellac primer for knot sealing.',
+   dry:'Dries quickly. End seal immediately. Knots may continue weeping resin for years.',
+   uses:'Construction framing, painted furniture, jigs and shop fixtures, box making, carving'},
+
+  {id:'purpleheart',name:'Purpleheart',type:'hardwood',region:'tropical',janka:2520,food:false,
+   short:'Striking violet-purple color — extremely hard, rot-resistant South American hardwood',
+   desc:'Purpleheart (Peltogyne spp.) is one of the most visually distinctive hardwoods. Freshly cut surfaces rapidly oxidize to a vivid purple in sunlight. Color fades to a brownish-purple over time — a UV-inhibiting finish maintains the color longest.',
+   work:'Difficult due to hardness and tendency to produce gummy resins that clog blades. Carbide tooling recommended. Dust can cause skin and respiratory irritation.',
+   finish:'Film finishes with a UV inhibitor best preserve the purple color. Avoid water-based finishes — they can cause the wood to turn grey.',
+   dry:'Dries without major difficulty. Moderate movement.',
+   uses:'Accent pieces, inlay, furniture legs, knife handles, turned objects, musical instruments'},
+  {id:'lignum-vitae',name:'Lignum Vitae',type:'hardwood',region:'tropical',janka:4500,food:false,
+   short:'The hardest and densest commercially available wood — self-lubricating, used for bearings and mallets',
+   desc:'Lignum vitae (wood of life) is the hardest wood in commercial use. So dense it sinks in water. Its natural guaiacum resin makes it self-lubricating — historically used for ship propeller shaft bearings. The interlocked grain makes splitting nearly impossible.',
+   work:'Extremely difficult to work. Requires very sharp carbide tools. Interlocked grain makes splitting nearly impossible — part of its value for mallet heads.',
+   finish:'The natural resin content is its own protection. Light oil or wax is all that is needed.',
+   dry:'Must be dried extremely slowly. Prone to severe checking if dried too fast.',
+   uses:'Carver mallet heads, plane knobs and totes, bearings, bowling balls, croquet mallets, turned objects'},
+  {id:'padauk',name:'African Padauk',type:'hardwood',region:'tropical',janka:1725,food:false,
+   short:'Brilliant orange-red color — stable, strong, and easier to work than most exotics',
+   desc:'African padauk (Pterocarpus soyauxii) is one of the most stable tropical hardwoods. The vivid orange-red color fades to a darker reddish-brown with UV exposure, similar to purpleheart.',
+   work:'Generally easy to work for an exotic — less resinous than teak, less hard than purpleheart. Dust and particles can cause skin irritation.',
+   finish:'Takes oil and film finishes well. UV-inhibiting topcoat preserves color. Natural reddish oils can bleed into light-colored adjacent materials — seal before gluing to pale woods.',
+   dry:'Dries well with minimal movement. One of the more stable tropical hardwoods.',
+   uses:'Furniture accents, turning, knife handles, musical instruments, inlay'},
+  {id:'wenge',name:'Wenge',type:'hardwood',region:'tropical',janka:1630,food:false,
+   short:'Dark espresso brown with fine black streaks — dramatic grain, difficult to work cleanly',
+   desc:'Wenge (Millettia laurentii) has one of the most distinctive grain patterns of any commercial hardwood — dark brown with near-black pores and fine lighter streaks. A prestige furniture wood, particularly in Scandinavian and contemporary design.',
+   work:'Difficult. Coarse open grain splinters easily and produces sharp slivers. End grain tears out badly. Dust is a severe irritant and potential sensitizer.',
+   finish:'Open pores need filling for a smooth film finish. Oil finishes produce a beautiful result but leave the grain texture.',
+   dry:'Dries slowly. Prone to surface checking.',
+   uses:'Furniture, cabinetry, flooring, turned objects, musical instruments (guitar fretboards)'},
+  {id:'bloodwood',name:'Bloodwood',type:'hardwood',region:'tropical',janka:2900,food:false,
+   short:'Intense crimson-red South American hardwood — stable color, very hard',
+   desc:'Bloodwood (Brosimum rubescens) is named for its vivid blood-red color, which is more stable than purpleheart and does not fade as dramatically with UV exposure.',
+   work:'Hard and dense. Works reasonably well with sharp carbide tooling. Less resinous than some exotics. Dust can be irritating.',
+   finish:'Takes oil and film finishes well. Color is relatively stable — one of the better-behaved exotics for color retention.',
+   dry:'Dries without major difficulty.',
+   uses:'Accent pieces, inlay, turning, knife handles, jewelry boxes, musical instrument components'},
+  {id:'bubinga',name:'Bubinga',type:'hardwood',region:'tropical',janka:2690,food:false,
+   short:'African hardwood with dramatic figure — often used as a rosewood substitute',
+   desc:'Bubinga (Guibourtia spp.) is a large-pored African hardwood with warm reddish-brown color and dramatic figure including waterfall, pommele, and flame patterns in quartersawn stock. Widely used as a more available substitute for Brazilian rosewood.',
+   work:'Moderately difficult. Interlocked grain of figured stock can tear out. Sharp tools and light cuts required.',
+   finish:'Takes oil and film finishes beautifully. The figure is best shown under an oil or penetrating finish.',
+   dry:'Dries slowly. Some movement.',
+   uses:'Furniture, drum shells, turned objects, musical instruments, knife handles'},
+  {id:'zebrawood',name:'Zebrawood',type:'hardwood',region:'tropical',janka:1575,food:false,
+   short:'Pale gold with dark brown stripes — dramatic figure, best seen on quartersawn surfaces',
+   desc:'Zebrawood (Microberlinia brazzavillensis) is recognizable from its alternating pale gold and dark brown striped grain, most pronounced on quartersawn surfaces.',
+   work:'Moderately difficult. Interlocked grain causes tearout. Sharp tools and planing with the grain required. Dust can cause skin and respiratory irritation.',
+   finish:'Takes oil and film finishes well. Clear finishes only — the figure is the point.',
+   dry:'Dries with some difficulty. Moderate movement.',
+   uses:'Furniture accents, veneer, inlay, turned objects, knife handles'},
+  {id:'rosewood-indian',name:'Indian Rosewood',type:'hardwood',region:'tropical',janka:3170,food:false,
+   short:'Richly figured, fragrant hardwood — the benchmark tone wood for musical instruments',
+   desc:'Indian rosewood (Dalbergia latifolia) is the standard reference wood for guitar backs and sides. Rich chocolate brown with darker streaks and a distinctive sweet scent. Note: Brazilian rosewood (D. nigra) is CITES Appendix I — effectively banned from commercial trade.',
+   work:'Works well with sharp tools. Natural oils can prevent glue adhesion — wipe surfaces with acetone before gluing. Dust is a significant sensitizer and potential allergen.',
+   finish:'Oil finishes work beautifully. Film finishes adhere better after an acetone wipe.',
+   dry:'Dries slowly. Moderate movement.',
+   uses:'Musical instruments (guitar, sitar), fine furniture, knife handles, turned objects'},
+  {id:'ebony',name:'Gaboon Ebony',type:'hardwood',region:'tropical',janka:3220,food:false,
+   short:'The blackest commercial wood — dense, fine-grained, used for accents and musical instruments',
+   desc:'Gaboon ebony (Diospyros crassiflora) is the blackest and most uniform of the commercial ebonies. Extraordinarily dense with a very fine grain that polishes to a mirror finish. Increasingly rare and expensive.',
+   work:'Very difficult. Extremely hard and brittle — prone to checking and splitting. Fine, irritating dust. Carbide tooling essential.',
+   finish:'Polishes to a natural glass-smooth finish with fine abrasives. Oils enhance the depth.',
+   dry:'Must be dried extremely slowly. Prone to severe checking.',
+   uses:'Piano keys, musical instrument fingerboards, knife handles, inlay, turned objects, accent pieces'},
 ];
 
 const SAWMILL=[
@@ -1581,7 +1769,7 @@ document.getElementById('si').addEventListener('input', function() {
   res.style.display = 'block';
 });
 
-// Notes
+// Notes panel toggle
 document.getElementById('nb2').addEventListener('click', () => {
   notesO = !notesO;
   document.getElementById('np').classList.toggle('open', notesO);
@@ -1591,11 +1779,6 @@ document.getElementById('cn').addEventListener('click', () => {
   notesO = false;
   document.getElementById('np').classList.remove('open');
   if (!menuO) document.getElementById('ov').classList.remove('active');
-});
-document.getElementById('ns').addEventListener('click', () => {
-  try { localStorage.setItem('bb_notes', document.getElementById('nt').value); } catch(e) {}
-  const m = document.getElementById('nsm');
-  m.style.opacity = '1'; setTimeout(() => m.style.opacity = '0', 1800);
 });
 document.getElementById('ov').addEventListener('click', closeAll);
 
@@ -1650,7 +1833,7 @@ function filt(section, cat, btn) {
 // ── RENDER HELPERS ────────────────────────────────────────────────
 // ── TERMS ────────────────────────────────────────────────────────
 function renderTerms() {
-  document.getElementById('terms-list').innerHTML = T.map(t =>
+  document.getElementById('terms-list').innerHTML = T.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(t =>
     `<div class="li" onclick="go('term-detail',{id:'${t.id}'})" data-cat="${t.cat}">
       <div style="flex:1"><div class="lil">${t.name}</div><div class="lis">${t.short}</div></div>
       <div class="lib">${t.cat.replace('-t','')}</div><div class="la">›</div></div>`
@@ -1684,7 +1867,7 @@ function renderTD(id) {
 
 // ── TOOLS ────────────────────────────────────────────────────────
 function renderTools() {
-  document.getElementById('tools-list').innerHTML = TOOLS.map(t =>
+  document.getElementById('tools-list').innerHTML = TOOLS.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(t =>
     `<div class="li" onclick="go('tool-detail',{id:'${t.id}'})" data-cat="${t.cat}">
       <div style="flex:1"><div class="lil">${t.name}</div><div class="lis">${t.short}</div></div>
       <div class="lib">${t.cat}</div><div class="la">›</div></div>`
@@ -1715,7 +1898,7 @@ function renderToolD(id) {
 
 // ── WOOD ─────────────────────────────────────────────────────────
 function renderWood() {
-  document.getElementById('wood-list').innerHTML = WOOD.map(w =>
+  document.getElementById('wood-list').innerHTML = WOOD.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(w =>
     `<div class="li" onclick="go('wood-detail',{id:'${w.id}'})" data-type="${w.type}" data-region="${w.region}" data-food="${w.food}">
       <div style="flex:1"><div class="lil">${w.name}</div>
       <div class="lis">Janka ${w.janka} lbf &middot; ${w.type==='hardwood'?'Hardwood':'Softwood'}${w.food?' &middot; Food Safe':''}</div></div>
@@ -1758,7 +1941,7 @@ function renderWoodD(id) {
 
 // ── SAWMILL ───────────────────────────────────────────────────────
 function renderSawmill() {
-  document.getElementById('sawmill-list').innerHTML = SAWMILL.map(s =>
+  document.getElementById('sawmill-list').innerHTML = SAWMILL.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(s =>
     `<div class="li" onclick="go('sawmill-detail',{id:'${s.id}'})">
       <div style="flex:1"><div class="lil">${s.name}</div><div class="lis">${s.short}</div></div>
       <div class="la">›</div></div>`
@@ -1774,7 +1957,7 @@ function renderSawmillD(id) {
 
 // ── JOINERY ───────────────────────────────────────────────────────
 function renderJoinery() {
-  document.getElementById('joinery-list').innerHTML = JOINERY.map(j =>
+  document.getElementById('joinery-list').innerHTML = JOINERY.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(j =>
     `<div class="li" onclick="go('joinery-detail',{id:'${j.id}'})" data-type="${j.type}">
       <div style="flex:1"><div class="lil">${j.name}</div><div class="lis">${j.short}</div></div>
       <div class="lib">${j.type}</div><div class="la">›</div></div>`
@@ -1797,7 +1980,7 @@ function renderJoineryD(id) {
 
 // ── CLAMPS ────────────────────────────────────────────────────────
 function renderClamps() {
-  document.getElementById('clamps-list').innerHTML = CLAMPS.map(c =>
+  document.getElementById('clamps-list').innerHTML = CLAMPS.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(c =>
     `<div class="li" onclick="go('clamp-detail',{id:'${c.id}'})">
       <div style="flex:1"><div class="lil">${c.name}</div><div class="lis">${c.short}</div></div>
       <div class="la">›</div></div>`
@@ -1881,10 +2064,11 @@ safeRender(renderGreenWood,      'green-wood');
 try { SEARCH_IDX = buildSearchIndex(); } catch(e) { console.warn('Search index failed:', e.message); }
 safeRender(initAboutLogo,        'logo');
 safeRender(initDisclaimer,       'disclaimer');
+safeRender(journalInit,          'journal');
 
 // ── FINISHING ─────────────────────────────────────────────────────
 function renderFinishing() {
-  document.getElementById('finishing-list').innerHTML = FINISHING.map(f =>
+  document.getElementById('finishing-list').innerHTML = FINISHING.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(f =>
     `<div class="li" onclick="go('finishing-detail',{id:'${f.id}'})" data-cat="${f.cat}">
       <div style="flex:1"><div class="lil">${f.name}</div><div class="lis">${f.short}</div></div>
       <div class="lib">${f.cat}</div><div class="la">›</div></div>`
@@ -1946,7 +2130,7 @@ function renderProjectD(id) {
 
 // ── MISTAKES ──────────────────────────────────────────────────────
 function renderMistakes() {
-  document.getElementById('mistakes-list').innerHTML = MISTAKES.map(m =>
+  document.getElementById('mistakes-list').innerHTML = MISTAKES.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(m =>
     `<div class="li" onclick="go('mistake-detail',{id:'${m.id}'})" data-cat="${m.cat}">
       <div style="flex:1">
         <div class="lil">${m.name}</div>
@@ -1966,7 +2150,7 @@ function renderMistakeD(id) {
 
 // ── GLUING ────────────────────────────────────────────────────────
 function renderGluing() {
-  document.getElementById('gluing-list').innerHTML = GLUING.map(g =>
+  document.getElementById('gluing-list').innerHTML = GLUING.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(g =>
     `<div class="li" onclick="go('gluing-detail',{id:'${g.id}'})" data-cat="${g.cat}">
       <div style="flex:1"><div class="lil">${g.name}</div><div class="lis">${g.short}</div></div>
       <div class="lib">${g.cat}</div><div class="la">›</div></div>`
@@ -1974,7 +2158,7 @@ function renderGluing() {
 }
 // ── MILLING ───────────────────────────────────────────────────────
 function renderMilling() {
-  document.getElementById('milling-list').innerHTML = MILLING.map(m =>
+  document.getElementById('milling-list').innerHTML = MILLING.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(m =>
     `<div class="li" onclick="go('milling-detail',{id:'${m.id}'})" data-cat="${m.cat}">
       <div style="flex:1"><div class="lil">${m.name}</div><div class="lis">${m.short}</div></div>
       <div class="lib">${m.cat}</div><div class="la">›</div></div>`
@@ -1982,7 +2166,7 @@ function renderMilling() {
 }
 // ── LAYOUT ────────────────────────────────────────────────────────
 function renderLayout() {
-  document.getElementById('layout-list').innerHTML = LAYOUT.map(l =>
+  document.getElementById('layout-list').innerHTML = LAYOUT.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(l =>
     `<div class="li" onclick="go('layout-detail',{id:'${l.id}'})" data-cat="${l.cat}">
       <div style="flex:1"><div class="lil">${l.name}</div><div class="lis">${l.short}</div></div>
       <div class="lib">${l.cat}</div><div class="la">›</div></div>`
@@ -1992,7 +2176,7 @@ function renderLayout() {
 // (called at bottom of init, after arrays are defined)
 // ── FINISH TROUBLESHOOTING ────────────────────────────────────────
 function renderFinishTrouble() {
-  document.getElementById('finish-trouble-list').innerHTML = FINISH_TROUBLE.map(f =>
+  document.getElementById('finish-trouble-list').innerHTML = FINISH_TROUBLE.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(f =>
     `<div class="li" onclick="go('ft-detail',{id:'${f.id}'})">
       <div style="flex:1"><div class="lil">${f.name}</div><div class="lis">${f.short}</div></div>
       <div class="la">›</div></div>`
@@ -2010,7 +2194,7 @@ function renderFTD(id) {
 
 // ── WOOD DEFECTS ──────────────────────────────────────────────────
 function renderWoodDefects() {
-  document.getElementById('wood-defects-list').innerHTML = WOOD_DEFECTS.map(d =>
+  document.getElementById('wood-defects-list').innerHTML = WOOD_DEFECTS.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(d =>
     `<div class="li" onclick="go('wd-detail',{id:'${d.id}'})" data-cat="${d.cat}">
       <div style="flex:1"><div class="lil">${d.name}</div><div class="lis">${d.short}</div></div>
       <div class="lib">${d.cat}</div><div class="la">›</div></div>`
@@ -2029,7 +2213,7 @@ function renderWDD(id) {
 
 // ── DOVETAIL WALKTHROUGH ──────────────────────────────────────────
 function renderDovetailGuide() {
-  document.getElementById('dovetail-list').innerHTML = DOVETAIL_STEPS.map(s =>
+  document.getElementById('dovetail-list').innerHTML = DOVETAIL_STEPS.slice().sort((a,b)=>a.step-b.step).map(s =>
     `<div class="li" onclick="go('dt-step',{id:'${s.id}'})">
       <div style="flex:1">
         <div class="lil">${s.step === 0 ? s.name : 'Step ' + s.step + ' — ' + s.name}</div>
@@ -2208,7 +2392,7 @@ function renderGluingD(id) {
 
 // ── FINISHING SCHEDULES ───────────────────────────────────────────
 function renderFinishSchedules() {
-  document.getElementById('finish-schedules-list').innerHTML = FINISH_SCHEDULES.map(s =>
+  document.getElementById('finish-schedules-list').innerHTML = FINISH_SCHEDULES.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(s =>
     `<div class="li" onclick="go('fs-detail',{id:'${s.id}'})">
       <div style="flex:1">
         <div class="lil">${s.name}</div>
@@ -2296,7 +2480,7 @@ function calcWoodMovement() {
 }// ── SPECIES-TO-FINISH MAPPING ─────────────────────────────────────
 // Maps wood IDs to recommended finishing schedule IDs// ── HARDWARE ──────────────────────────────────────────────────────
 function renderHardware() {
-  document.getElementById('hardware-list').innerHTML = HARDWARE.map(h =>
+  document.getElementById('hardware-list').innerHTML = HARDWARE.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(h =>
     `<div class="li" onclick="go('hardware-detail',{id:'${h.id}'})" data-cat="${h.cat}">
       <div style="flex:1"><div class="lil">${h.name}</div><div class="lis">${h.short}</div></div>
       <div class="lib">${h.cat}</div><div class="la">›</div></div>`
@@ -2311,7 +2495,7 @@ function renderHardwareD(id) {
 
 // ── GREEN WOODWORKING ─────────────────────────────────────────────
 function renderGreenWood() {
-  document.getElementById('green-wood-list').innerHTML = GREEN_WOOD.map(g =>
+  document.getElementById('green-wood-list').innerHTML = GREEN_WOOD.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(g =>
     `<div class="li" onclick="go('gw-detail',{id:'${g.id}'})" data-cat="${g.cat}">
       <div style="flex:1"><div class="lil">${g.name}</div><div class="lis">${g.short}</div></div>
       <div class="lib">${g.cat}</div><div class="la">›</div></div>`
@@ -2383,6 +2567,178 @@ function safeRender(fn, label) {
     console.warn('Render failed [' + label + ']:', e.message);
   }
 }
+
+// ── WORKSHOP JOURNAL ──────────────────────────────────────────────
+const JOURNAL_KEY = 'bb_journal_v1';
+const LEGACY_KEY  = 'bb_notes';
+let journalEntries = [];
+let activeEntryId  = null;
+
+function journalLoad() {
+  try {
+    const raw = localStorage.getItem(JOURNAL_KEY);
+    journalEntries = raw ? JSON.parse(raw) : [];
+  } catch(e) {
+    journalEntries = [];
+  }
+  // Migrate legacy single-textarea notes to a journal entry
+  try {
+    const legacy = localStorage.getItem(LEGACY_KEY);
+    if (legacy && legacy.trim()) {
+      const exists = journalEntries.find(e => e.id === 'legacy');
+      if (!exists) {
+        journalEntries.unshift({
+          id: 'legacy',
+          created: Date.now() - 1000,
+          modified: Date.now() - 1000,
+          body: legacy.trim()
+        });
+        journalSave();
+        localStorage.removeItem(LEGACY_KEY);
+      }
+    }
+  } catch(e) {}
+}
+
+function journalSave() {
+  try {
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journalEntries));
+  } catch(e) {
+    console.warn('Journal save failed:', e.message);
+  }
+}
+
+function journalFormatDate(ts) {
+  const d = new Date(ts);
+  const date = d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  const time = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+  return date + ' · ' + time;
+}
+
+function journalRenderList() {
+  const list = document.getElementById('nj-list');
+  if (!list) return;
+  if (!journalEntries.length) {
+    list.innerHTML = '<div class="nj-empty">No entries yet.<br>Tap <strong>+ New Entry</strong> to start your shop journal.</div>';
+    return;
+  }
+  list.innerHTML = journalEntries
+    .slice()
+    .sort((a, b) => b.modified - a.modified)
+    .map(e => {
+      const preview = e.body.trim().split('\n')[0].substring(0, 60) || '(empty)';
+      return `<div class="nj-entry" onclick="journalOpenEntry('${e.id}')">
+        <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
+        <div class="nj-entry-preview">${preview}</div>
+      </div>`;
+    }).join('');
+}
+
+function journalOpenEntry(id) {
+  const entry = journalEntries.find(e => e.id === id);
+  if (!entry) return;
+  activeEntryId = id;
+  const body = document.getElementById('nj-body');
+  const meta = document.getElementById('nj-editor-meta');
+  if (body) body.value = entry.body;
+  if (meta) meta.textContent = 'Created ' + journalFormatDate(entry.created);
+  document.getElementById('nj-list-view').style.display = 'none';
+  const editor = document.getElementById('nj-editor');
+  editor.style.display = 'flex';
+  setTimeout(() => { if (body) body.focus(); }, 50);
+}
+
+function journalNewEntry() {
+  const id = 'e' + Date.now();
+  const now = Date.now();
+  const entry = { id, created: now, modified: now, body: '' };
+  journalEntries.unshift(entry);
+  journalSave();
+  journalOpenEntry(id);
+}
+
+function journalSaveEntry() {
+  const body = document.getElementById('nj-body');
+  const entry = journalEntries.find(e => e.id === activeEntryId);
+  if (!entry || !body) return;
+  entry.body = body.value;
+  entry.modified = Date.now();
+  journalSave();
+  const msg = document.getElementById('nj-saved-msg');
+  if (msg) { msg.style.opacity = '1'; setTimeout(() => msg.style.opacity = '0', 1800); }
+}
+
+function journalDeleteEntry() {
+  if (!activeEntryId) return;
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
+  journalEntries = journalEntries.filter(e => e.id !== activeEntryId);
+  journalSave();
+  journalBackToList();
+}
+
+function journalBackToList() {
+  activeEntryId = null;
+  document.getElementById('nj-editor').style.display = 'none';
+  document.getElementById('nj-list-view').style.display = 'flex';
+  journalRenderList();
+}
+
+function journalExport() {
+  if (!journalEntries.length) {
+    alert('No journal entries to export.');
+    return;
+  }
+  const sorted = journalEntries.slice().sort((a, b) => b.modified - a.modified);
+  const text = sorted.map(e =>
+    '── ' + journalFormatDate(e.created) + ' ──\n' + e.body.trim()
+  ).join('\n\n');
+  try {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('All notes copied to clipboard. Paste into any app to save.');
+    }).catch(() => journalExportFallback(text));
+  } catch(e) {
+    journalExportFallback(text);
+  }
+}
+
+function journalExportFallback(text) {
+  // Fallback: show in a textarea for manual copy
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80vw;height:60vh;z-index:99999;padding:12px;font-size:13px;font-family:monospace;border:2px solid #1B4D3E;border-radius:8px';
+  document.body.appendChild(ta);
+  ta.select();
+  const close = document.createElement('button');
+  close.textContent = 'Close';
+  close.style.cssText = 'position:fixed;top:calc(50% + 30vh + 8px);left:50%;transform:translateX(-50%);z-index:99999;background:#1B4D3E;color:white;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer';
+  close.onclick = () => { document.body.removeChild(ta); document.body.removeChild(close); };
+  document.body.appendChild(close);
+}
+
+function journalInit() {
+  journalLoad();
+  journalRenderList();
+  const newBtn  = document.getElementById('nj-new');
+  const saveBtn = document.getElementById('nj-save');
+  const delBtn  = document.getElementById('nj-delete');
+  const backBtn = document.getElementById('nj-back');
+  const expBtn  = document.getElementById('nj-export');
+  if (newBtn)  newBtn.addEventListener('click',  journalNewEntry);
+  if (saveBtn) saveBtn.addEventListener('click',  journalSaveEntry);
+  if (delBtn)  delBtn.addEventListener('click',   journalDeleteEntry);
+  if (backBtn) backBtn.addEventListener('click',  journalBackToList);
+  if (expBtn)  expBtn.addEventListener('click',   journalExport);
+  // Auto-save on body change (debounced)
+  const body = document.getElementById('nj-body');
+  if (body) {
+    let saveTimer;
+    body.addEventListener('input', () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(journalSaveEntry, 1500);
+    });
+  }
+}
+
 
 </script>
 
