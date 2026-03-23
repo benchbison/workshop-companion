@@ -299,19 +299,20 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
       <textarea id="nj-body" placeholder="Measurements, observations, ideas..." style="width:100%;height:100%;min-height:180px;background:transparent;border:none;font-family:var(--ss);font-size:14px;line-height:1.7;color:var(--ink);resize:none;outline:none;padding:8px 0"></textarea>
     </div>
     <div style="padding:8px 12px;display:flex;gap:8px;flex-shrink:0;border-top:1px solid var(--bd)">
-      <button id="nj-save" onclick="journalSaveEntry()" style="flex:1;background:var(--ph);color:white;border:none;border-radius:8px;padding:9px;font-family:var(--ss);font-size:13px;font-weight:600;cursor:pointer">Save</button>
-      <button id="nj-back" onclick="journalBackToList()" style="background:transparent;color:var(--il);border:1.5px solid var(--bd);border-radius:8px;padding:9px 14px;font-family:var(--ss);font-size:13px;cursor:pointer">← Back</button>
+      <button id="nj-save" style="flex:1;background:var(--ph);color:white;border:none;border-radius:8px;padding:9px;font-family:var(--ss);font-size:13px;font-weight:600;cursor:pointer">Save</button>
+      <button id="nj-delete" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">Delete</button>
+      <button id="nj-back" style="background:transparent;color:var(--il);border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">← Back</button>
     </div>
     <p id="nj-saved-msg" style="text-align:center;font-size:11px;color:var(--pm);padding:4px 0 6px;opacity:0;transition:opacity 0.3s">Saved.</p>
   </div>
   <!-- Entry list (shown when browsing) -->
   <div id="nj-list-view" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
     <div style="padding:10px 12px 8px;flex-shrink:0">
-      <button id="nj-new" onclick="journalNewEntry()" style="width:100%;background:var(--ph);color:white;border:none;border-radius:8px;padding:10px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer">+ New Entry</button>
+      <button id="nj-new" style="width:100%;background:var(--ph);color:white;border:none;border-radius:8px;padding:10px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer">+ New Entry</button>
     </div>
     <div id="nj-list" style="flex:1;overflow-y:auto;padding:0 0 8px"></div>
     <div style="padding:8px 12px;border-top:1px solid var(--bd);flex-shrink:0">
-      <button id="nj-export" onclick="journalExport()" style="width:100%;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">Export All Notes</button>
+      <button id="nj-export" style="width:100%;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">Export All Notes</button>
     </div>
   </div>
 </aside>
@@ -425,14 +426,16 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
 <!-- TERMS -->
 <section id="pg-terms" class="pg">
   <div class="shb"><h2>Woodworking Terms</h2><p>Tap a filter tag on any term to see that category</p></div>
-  <div class="sn" id="terms-sn">
-    <button class="snb active" onclick="filt('terms',null,this)">All</button>
-    <button class="snb" onclick="filt('terms','sawing',this)">Sawing</button>
-    <button class="snb" onclick="filt('terms','milling',this)">Milling</button>
-    <button class="snb" onclick="filt('terms','joinery-t',this)">Joinery</button>
-    <button class="snb" onclick="filt('terms','finishing',this)">Finishing</button>
-    <button class="snb" onclick="filt('terms','measurement',this)">Measurement</button>
-  </div>
+  <div class=<div id="terms-sn" class="sn">
+  <button class="snb active" onclick="filtTerms(null)">All</button>
+  <button class="snb" onclick="filtTerms('wood')">Wood</button>
+  <button class="snb" onclick="filtTerms('cutting')">Cutting</button>
+  <button class="snb" onclick="filtTerms('milling')">Milling</button>
+  <button class="snb" onclick="filtTerms('joinery')">Joinery</button>
+  <button class="snb" onclick="filtTerms('tools')">Tools</button>
+  <button class="snb" onclick="filtTerms('finishing')">Finishing</button>
+  <button class="snb" onclick="filtTerms('measuring')">Measuring</button>
+</div>
   <div id="terms-list" class="cl"></div>
 </section>
 <section id="pg-term-detail" class="pg"><div class="dp" id="term-dc"></div></section>
@@ -701,7 +704,7 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
 
     <div class="ds">
       <h3>Disclaimer</h3>
-      <p style="font-size:15px;color:var(--im);line-height:1.7">This app provides general woodworking reference information for educational purposes only. It is not a substitute for professional training or advice. Content is provided as-is with no warranty of accuracy or completeness. Use of this app is at your own risk.</p>
+      <p style="font-size:13px;color:var(--im);line-height:1.7">This app provides general woodworking reference information for educational purposes only. It is not a substitute for professional training or advice. Content is provided as-is with no warranty of accuracy or completeness. Use of this app is at your own risk.</p>
     </div>
     <div class="ds">
       <h3>Support the work</h3>
@@ -709,11 +712,7 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
     </div>
     <div class="ds">
       <h3>Version</h3>
-      <p style="font-size:13px;color:var(--il)">Workshop Companion v1.2<br>
-        v1.2, Workshop journal, UI reorganization, PWA install<br>
-        v1.1, 30 wood species, alphabetical sorting, continuity fixes<br>
-        v1.0, Initial release<br><br>
-        Built with care. Content ongoing.<br>No data collected.</p>
+      <p style="font-size:13px;color:var(--il)">Workshop Companion v1.0<br>Built with care. Content ongoing.<br>No data collected.</p>
     </div>
 
   </div>
@@ -772,7 +771,7 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
       <div class="cres"><span class="crn" id="wm-num">--</span><div class="crl">Inches of movement</div></div>
       <div style="background:var(--pp);border-radius:10px;padding:14px;margin-top:10px;font-size:14px;color:var(--im);line-height:1.7" id="wm-notes"></div>
     </div>
-    <div style="margin-top:16px;background:var(--cr);border-radius:10px;padding:14px;font-size:13px;color:var(--il);line-height:1.65">
+    <div style="margin-top:16px;background:var(--cream);border-radius:10px;padding:14px;font-size:13px;color:var(--il);line-height:1.65">
       <strong style="color:var(--im)">Typical moisture content ranges:</strong><br>
       Kiln-dried lumber: 6–8% · Air-dried (shop): 8–12% · Interior (heated): 6–8% · Exterior / unheated: 12–16%<br><br>
       <strong style="color:var(--im)">What this means:</strong> A 12" wide flatsawn white oak panel moving from 8% (kiln-dried) to 14% (unheated space) will expand approximately 0.45". Always account for wood movement in your joinery and panel design.
@@ -976,103 +975,103 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
 const LOGO = "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";
 
 const T=[
-  {id:'kerf',name:'Kerf',cat:'sawing',short:'Width of material removed by a saw blade',def:'The kerf is the slot left behind by a saw blade. Its width is determined by the set of the teeth. A wider kerf removes more material and can reduce binding.',rel:['set','fleam','rip','crosscut'],tags:[{l:'Sawing',f:'sawing'},{l:'Measurement',f:'measurement'}]},
-  {id:'set',name:'Set (Saw)',cat:'sawing',short:'Outward bend of saw teeth to create kerf clearance',def:'The set refers to the angle at which alternate teeth are bent away from the blade body, creating a kerf wider than the blade plate itself, preventing binding.',rel:['kerf','fleam'],tags:[{l:'Sawing',f:'sawing'}]},
-  {id:'fleam',name:'Fleam',cat:'sawing',short:'Cross-filing angle of saw teeth',def:'Fleam is the angle at which saw teeth are filed across their face. A higher fleam angle creates a more aggressive slicing action used in crosscut saws.',rel:['kerf','set','crosscut'],tags:[{l:'Sawing',f:'sawing'}]},
-  {id:'rip',name:'Rip Cut',cat:'sawing',short:'Cutting along the length of the grain',def:'A rip cut runs parallel to the wood grain. Rip saws have teeth filed with little or no fleam, designed to chisel through long grain fibers efficiently.',rel:['crosscut','kerf','grain'],tags:[{l:'Sawing',f:'sawing'},{l:'Milling',f:'milling'}]},
-  {id:'crosscut',name:'Crosscut',cat:'sawing',short:'Cutting across the grain',def:'A crosscut runs perpendicular to the wood grain to shorten a board. Crosscut saw teeth are filed with fleam to slice cleanly across fibers rather than tear them.',rel:['rip','kerf','fleam'],tags:[{l:'Sawing',f:'sawing'}]},
-  {id:'grain',name:'Grain',cat:'milling',short:'Direction and character of wood fiber growth',def:'Grain refers to the direction, size, and arrangement of wood fibers as they grew in the tree. Working with the grain produces clean results; working against it causes tearout.',rel:['tearout','rip','crosscut'],tags:[{l:'Milling',f:'milling'}]},
+  {id:'kerf',name:'Kerf',cat:'cutting',short:'Width of material removed by a saw blade',def:'The kerf is the slot left behind by a saw blade. Its width is determined by the set of the teeth. A wider kerf removes more material and can reduce binding.',rel:['set','fleam','rip','crosscut'],tags:[{l:'Sawing',f:'sawing'},{l:'Measurement',f:'measurement'}]},
+  {id:'set',name:'Set (Saw)',cat:'cutting',short:'Outward bend of saw teeth to create kerf clearance',def:'The set refers to the angle at which alternate teeth are bent away from the blade body, creating a kerf wider than the blade plate itself, preventing binding.',rel:['kerf','fleam'],tags:[{l:'Sawing',f:'sawing'}]},
+  {id:'fleam',name:'Fleam',cat:'cutting',short:'Cross-filing angle of saw teeth',def:'Fleam is the angle at which saw teeth are filed across their face. A higher fleam angle creates a more aggressive slicing action used in crosscut saws.',rel:['kerf','set','crosscut'],tags:[{l:'Sawing',f:'sawing'}]},
+  {id:'rip',name:'Rip Cut',cat:'cutting',short:'Cutting along the length of the grain',def:'A rip cut runs parallel to the wood grain. Rip saws have teeth filed with little or no fleam, designed to chisel through long grain fibers efficiently.',rel:['crosscut','kerf','grain'],tags:[{l:'Sawing',f:'sawing'},{l:'Milling',f:'milling'}]},
+  {id:'crosscut',name:'Crosscut',cat:'cutting',short:'Cutting across the grain',def:'A crosscut runs perpendicular to the wood grain to shorten a board. Crosscut saw teeth are filed with fleam to slice cleanly across fibers rather than tear them.',rel:['rip','kerf','fleam'],tags:[{l:'Sawing',f:'sawing'}]},
+  {id:'grain',name:'Grain',cat:'wood',short:'Direction and character of wood fiber growth',def:'Grain refers to the direction, size, and arrangement of wood fibers as they grew in the tree. Working with the grain produces clean results; working against it causes tearout.',rel:['tearout','rip','crosscut'],tags:[{l:'Milling',f:'milling'}]},
   {id:'tearout',name:'Tearout',cat:'milling',short:'Fibers torn rather than cleanly cut, leaving a rough surface',def:'Tearout occurs when a cutting edge lifts and breaks wood fibers rather than slicing through them cleanly. Prevention: plane with the grain, close the plane mouth, set a tight chip breaker, take lighter cuts.',rel:['grain'],tags:[{l:'Milling',f:'milling'},{l:'Finishing',f:'finishing'}]},
-  {id:'mortise',name:'Mortise',cat:'joinery-t',short:'Rectangular recess cut to receive a tenon',def:'A mortise is a rectangular cavity cut into a piece of wood, designed to accept a corresponding tenon. Mortise walls should be square, clean, and sized to the tenon with a snug but not forced fit.',rel:['tenon'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'tenon',name:'Tenon',cat:'joinery-t',short:'Projecting tongue cut to fit into a mortise',def:'A tenon is a projection on the end of a piece of wood, shaped to fit into a mortise. Proper tenon fit is snug, it should require hand pressure to seat, not mallet blows.',rel:['mortise'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'dovetail',name:'Dovetail',cat:'joinery-t',short:'Interlocking joint with trapezoidal pins and tails',def:'The dovetail joint uses trapezoidal interlocking parts, tails on one board and pins on the other, that lock mechanically when assembled.',rel:['mortise','tenon'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'winding',name:'Winding (Sticks)',cat:'measurement',short:'Twist across the face of a board',def:'Winding refers to twist in a board where one corner is higher or lower than the others. Winding sticks placed across both ends and sighted along reveal any twist clearly.',rel:[],tags:[{l:'Measurement',f:'measurement'}]},
-  {id:'refface',name:'Reference Face',cat:'measurement',short:'The first flat, true face established on a board',def:'The face side is the first surface you flatten on a rough board, the reference datum from which all other dimensions are measured.',rel:['winding'],tags:[{l:'Measurement',f:'measurement'},{l:'Milling',f:'milling'}]},
-  {id:'rebate',name:'Rebate / Rabbet',cat:'joinery-t',short:'Rectangular step cut along the edge or end of a board',def:'A rebate is an L-shaped step cut along the edge or end of a board. Used in drawers, cabinet backs, frame-and-panel work, and glazing.',rel:['dado'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'dado',name:'Dado / Housing',cat:'joinery-t',short:'Rectangular channel cut across the grain',def:'A dado is a rectangular trench cut across the grain of a board, typically to accept a shelf or panel.',rel:['rebate'],tags:[{l:'Joinery',f:'joinery-t'}]},
+  {id:'mortise',name:'Mortise',cat:'joinery',short:'Rectangular recess cut to receive a tenon',def:'A mortise is a rectangular cavity cut into a piece of wood, designed to accept a corresponding tenon. Mortise walls should be square, clean, and sized to the tenon with a snug but not forced fit.',rel:['tenon'],tags:[{l:'Joinery',f:'joinery-t'}]},
+  {id:'tenon',name:'Tenon',cat:'joinery',short:'Projecting tongue cut to fit into a mortise',def:'A tenon is a projection on the end of a piece of wood, shaped to fit into a mortise. Proper tenon fit is snug, it should require hand pressure to seat, not mallet blows.',rel:['mortise'],tags:[{l:'Joinery',f:'joinery-t'}]},
+  {id:'dovetail',name:'Dovetail',cat:'joinery',short:'Interlocking joint with trapezoidal pins and tails',def:'The dovetail joint uses trapezoidal interlocking parts, tails on one board and pins on the other, that lock mechanically when assembled.',rel:['mortise','tenon'],tags:[{l:'Joinery',f:'joinery-t'}]},
+  {id:'winding',name:'Winding (Sticks)',cat:'milling',short:'Twist across the face of a board',def:'Winding refers to twist in a board where one corner is higher or lower than the others. Winding sticks placed across both ends and sighted along reveal any twist clearly.',rel:[],tags:[{l:'Measurement',f:'measurement'}]},
+  {id:'refface',name:'Reference Face',cat:'milling',short:'The first flat, true face established on a board',def:'The face side is the first surface you flatten on a rough board, the reference datum from which all other dimensions are measured.',rel:['winding'],tags:[{l:'Measurement',f:'measurement'},{l:'Milling',f:'milling'}]},
+  {id:'rebate',name:'Rebate / Rabbet',cat:'joinery',short:'Rectangular step cut along the edge or end of a board',def:'A rebate is an L-shaped step cut along the edge or end of a board. Used in drawers, cabinet backs, frame-and-panel work, and glazing.',rel:['dado'],tags:[{l:'Joinery',f:'joinery-t'}]},
+  {id:'dado',name:'Dado / Housing',cat:'joinery',short:'Rectangular channel cut across the grain',def:'A dado is a rectangular trench cut across the grain of a board, typically to accept a shelf or panel.',rel:['rebate'],tags:[{l:'Joinery',f:'joinery-t'}]},
   {id:'burnishing',name:'Burnishing',cat:'finishing',short:'Compressing wood fibers or turning a burr on a scraper',def:'Burnishing refers to two techniques: (1) smoothing wood fibers before finishing, and (2) forming the cutting burr on a card scraper by drawing a burnisher across the edge at a slight angle after sharpening.',rel:[],tags:[{l:'Finishing',f:'finishing'}]},
 ,
-  {id:'pocket-hole',name:'Pocket Hole',cat:'joinery-t',
+  {id:'pocket-hole',name:'Pocket Hole',cat:'joinery',
    short:'An angled counterbored hole drilled into a workpiece to receive a pocket screw',
-   def:'A pocket hole is drilled at an angle (typically 15 degrees) using a pocket hole jig. The stepped drill bit creates a counterbore (the pocket) and a pilot hole in one pass. A self-tapping screw is driven through the pocket and into the mating piece. The angled geometry pulls the joint tight and resists pulling apart. Pocket holes are always hidden on the back or underside of a piece.',
+   def:'A pocket hole is drilled at an angle (typically 15 degrees) using a pocket hole jig. The stepped drill bit creates a counterbore (the pocket) and a pilot hole in one pass. A self-tapping screw is driven through the pocket and into the mating piece. The angled geometry pulls the joint tight. Pocket holes are always hidden on the back or underside of a piece.',
    rel:['tenon','dado'],tags:[{l:'Pocket Hole Jig',f:'pocket-hole-jig'},{l:'Pocket Screw Joint',f:'pocket'}]},
-  {id:'shear',name:'Shear',cat:'joinery-t',
+  {id:'shear',name:'Shear',cat:'joinery',
    short:'A force that causes two parts to slide past each other along a plane',
    def:'Shear is a mechanical force in which two connected parts are pushed or pulled in opposite but parallel directions along the same plane, causing them to slide against each other. In woodworking, a shelf bearing a load experiences shear at the joint connecting it to the case side. Dados and housing joints resist shear well because the wood itself carries the load, not just the fastener or glue line.',
    rel:['dado','mortise'],tags:[{l:'Dado / Housing',f:'dado-j'},{l:'Pocket Hole Jig',f:'pocket-hole-jig'}]},
-  {id:'jig',name:'Jig',cat:'measurement',
+  {id:'jig',name:'Jig',cat:'tools',
    short:'A shop-made or commercial device that guides a tool to a consistent, repeatable result',
-   def:'A jig is any device that holds a workpiece, guides a cutting tool, or both, in order to produce a repeatable result without requiring the operator to measure or lay out each cut individually. Jigs range from a simple scrap of wood clamped to a bench to commercial precision devices like a pocket hole jig or dovetail jig. The defining characteristic is repeatability: the jig does the layout work once so every subsequent piece comes out identical. Shop-made jigs are a core part of hand-tool and power-tool woodworking and are often built for a single specific task.',
-   rel:['dado','mortise'],tags:[{l:'Pocket Hole Jig',f:'pocket-hole-jig'},{l:'Pocket Hole',f:'pocket-hole'}]},
-  {id:'fixture',name:'Fixture',cat:'measurement',
+   def:'A jig is any device that holds a workpiece, guides a cutting tool, or both, in order to produce a repeatable result without requiring the operator to measure or lay out each cut individually. Jigs range from a simple scrap of wood clamped to a bench to commercial precision devices like a pocket hole jig or dovetail jig. The defining characteristic is repeatability.',
+   rel:['dado','mortise'],tags:[{l:'Pocket Hole Jig',f:'pocket-hole-jig'}]},
+  {id:'fixture',name:'Fixture',cat:'tools',
    short:'A device that holds a workpiece in position during cutting or assembly',
-   def:'A fixture holds the workpiece still and in the correct position while a tool does its work. Unlike a jig, which guides the tool, a fixture only positions and secures the work. In practice the terms jig and fixture are used interchangeably in the shop. A typical fixture might be a notched board that holds a bowl blank at the correct angle for drilling, or a clamping caul that distributes pressure evenly across a glue-up.',
+   def:'A fixture holds the workpiece still and in the correct position while a tool does its work. Unlike a jig which guides the tool, a fixture only positions and secures the work. In practice the terms jig and fixture are used interchangeably in the shop.',
    rel:['mortise'],tags:[{l:'Jig',f:'jig'}]},
-  {id:'iron',name:'Plane Iron',cat:'sawing',
+  {id:'iron',name:'Plane Iron',cat:'tools',
    short:'The cutting blade of a hand plane',
-   def:'The plane iron is the hardened steel blade that does the cutting in a hand plane. It is ground and honed to a fine edge at an angle (typically 25 to 30 degrees for the primary bevel), then seated in the plane body at a bed angle (45 degrees on most bench planes). The iron is adjusted for depth of cut and lateral alignment before each session. A sharp iron is the single most important factor in plane performance.',
+   def:'The plane iron is the hardened steel blade that does the cutting in a hand plane. It is ground and honed to a fine edge at an angle (typically 25 to 30 degrees for the primary bevel), then seated in the plane body at a bed angle (45 degrees on most bench planes). A sharp iron is the single most important factor in plane performance.',
    rel:['burnishing','tearout'],tags:[{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'chip-breaker',name:'Chip Breaker',cat:'sawing',
+  {id:'chip-breaker',name:'Chip Breaker',cat:'tools',
    short:'A stiffening plate clamped to the top of a plane iron that breaks the shaving to reduce tearout',
-   def:'The chip breaker is a curved steel plate clamped to the flat face of the plane iron. As a shaving curls up the iron it hits the chip breaker and is forced to fold back and break before the cutting edge can lift the grain ahead of the cut. Setting the chip breaker closer to the cutting edge reduces tearout in difficult grain. It also stiffens the iron assembly to reduce chatter.',
+   def:'The chip breaker is a curved steel plate clamped to the flat face of the plane iron. As a shaving curls up the iron it hits the chip breaker and is forced to fold back and break before the cutting edge can lift the grain ahead of the cut. Setting the chip breaker closer to the cutting edge reduces tearout in difficult grain.',
    rel:['tearout','grain'],tags:[{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'sole',name:'Sole',cat:'sawing',
+  {id:'sole',name:'Sole',cat:'tools',
    short:'The flat bottom surface of a hand plane that rides on the workpiece',
-   def:'The sole is the machined flat bottom of a hand plane body. It registers against the workpiece surface to control the depth and consistency of the cut. A flat sole is essential for accurate jointing and smoothing. The mouth is the opening in the sole through which the iron protrudes. On a well-tuned plane the sole is flat along its length and across its width to within a few thousandths of an inch.',
+   def:'The sole is the machined flat bottom of a hand plane body. It registers against the workpiece surface to control the depth and consistency of the cut. A flat sole is essential for accurate jointing and smoothing. The mouth is the opening in the sole through which the iron protrudes.',
    rel:['grain'],tags:[{l:'Bench Plane',f:'bench-plane'},{l:'Mouth',f:'mouth'}]},
-  {id:'mouth',name:'Mouth',cat:'sawing',
+  {id:'mouth',name:'Mouth',cat:'tools',
    short:'The opening in the sole of a plane through which the iron protrudes',
-   def:'The mouth is the gap in the sole of a hand plane where the cutting iron emerges. A tight mouth supports the wood fibers right at the cutting edge, reducing tearout on difficult grain. A wide mouth allows thicker shavings and faster stock removal. On metal planes the mouth opening can be adjusted by moving the frog forward or backward. A tight mouth is best for smoothing; a wider mouth for roughing.',
+   def:'The mouth is the gap in the sole of a hand plane where the cutting iron emerges. A tight mouth supports the wood fibers right at the cutting edge, reducing tearout on difficult grain. A wide mouth allows thicker shavings and faster stock removal. On metal planes the mouth opening can be adjusted by moving the frog forward or backward.',
    rel:['tearout','grain'],tags:[{l:'Bench Plane',f:'bench-plane'},{l:'Sole',f:'sole'}]},
-  {id:'bevel',name:'Bevel',cat:'sawing',
+  {id:'bevel',name:'Bevel',cat:'tools',
    short:'An angled surface ground onto a cutting tool, or an angled edge on a workpiece',
-   def:'In tool terms, the bevel is the angled face ground onto a chisel or plane iron that forms the cutting edge. The primary bevel is typically ground at 25 to 30 degrees; a microbevel of 30 to 35 degrees is sometimes honed on the very tip to make sharpening faster. In workpiece terms, a bevel is any angled surface not perpendicular to the face. A chamfer is a small bevel cut along an edge for visual effect or to remove a sharp corner.',
+   def:'In tool terms, the bevel is the angled face ground onto a chisel or plane iron that forms the cutting edge. The primary bevel is typically ground at 25 to 30 degrees; a microbevel of 30 to 35 degrees is sometimes honed on the very tip to make sharpening faster. In workpiece terms, a bevel is any angled surface not perpendicular to the face.',
    rel:['burnishing'],tags:[{l:'Bench Chisel',f:'chisel'},{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'camber',name:'Camber',cat:'sawing',
+  {id:'camber',name:'Camber',cat:'tools',
    short:'A slight convex curve ground across the width of a plane iron',
-   def:'Camber is a deliberate slight curve ground across the cutting edge of a plane iron. A heavily cambered iron on a jack plane allows aggressive stock removal by digging in at the center and lifting cleanly at the corners without leaving track marks. A lightly cambered smoother iron takes very fine shavings. A jointer plane iron is typically straight or very slightly cambered.',
+   def:'Camber is a deliberate slight curve ground across the cutting edge of a plane iron. A heavily cambered iron on a jack plane allows aggressive stock removal by digging in at the center and lifting cleanly at the corners without leaving track marks. A lightly cambered smoother iron takes very fine shavings.',
    rel:['tearout'],tags:[{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'fence',name:'Fence',cat:'measurement',
+  {id:'fence',name:'Fence',cat:'measuring',
    short:'A guide that controls the lateral position of a cut, running parallel to an edge or face',
-   def:'A fence is any fixed or adjustable guide that registers against a reference surface to control where a tool cuts. On a table saw the rip fence runs parallel to the blade and sets the width of a rip cut. On a router table the fence controls the depth of a profile cut. On a marking gauge the fence rides along the face of the board to scribe a consistent line. The fence is always referenced against a flat straight surface.',
+   def:'A fence is any fixed or adjustable guide that registers against a reference surface to control where a tool cuts. On a table saw the rip fence runs parallel to the blade and sets the width of a rip cut. On a marking gauge the fence rides along the face of the board to scribe a consistent line.',
    rel:['refface','rip'],tags:[{l:'Marking Gauge',f:'marking-gauge'},{l:'Rip Saw',f:'rip-saw'}]},
-  {id:'caul',name:'Caul',cat:'measurement',
+  {id:'caul',name:'Caul',cat:'measuring',
    short:'A stiff board or pad used to distribute clamping pressure evenly across a glue-up',
-   def:'A caul is any stiff flat board, curved form, or padded block placed between a clamp jaw and the workpiece to spread clamping pressure over a wider area. Flat cauls prevent clamp jaws from denting soft wood and distribute force across a panel glue-up. Curved cauls are used in bent lamination or to apply even pressure along a curved surface. Cauls are often shop-made from scrap and waxed to prevent glue adhesion.',
+   def:'A caul is any stiff flat board, curved form, or padded block placed between a clamp jaw and the workpiece to spread clamping pressure over a wider area. Flat cauls prevent clamp jaws from denting soft wood and distribute force across a panel glue-up. Cauls are often shop-made from scrap and waxed to prevent glue adhesion.',
    rel:['grain'],tags:[{l:'F-Clamp (Bar Clamp)',f:'fclamp'},{l:'Parallel Jaw Clamp',f:'parallel'}]},
-  {id:'snipe',name:'Snipe',cat:'sawing',
+  {id:'snipe',name:'Snipe',cat:'cutting',
    short:'A deeper cut at the beginning or end of a board caused by a thickness planer',
    def:'Snipe is a common defect from thickness planing where the planer takes a deeper cut for a few inches at the start and end of a board. It is caused by the board tipping slightly as it enters or exits the planer rollers before both rollers are fully engaged. Snipe can be minimized by supporting the board level as it enters and exits, or by leaving extra length to cut off after planing.',
    rel:['grain'],tags:[]},
-  {id:'chatter',name:'Chatter',cat:'sawing',
+  {id:'chatter',name:'Chatter',cat:'tools',
    short:'Vibration during a cut that leaves a rippled or washboard surface',
-   def:'Chatter is the rapid vibration of a cutting tool during a cut, leaving a series of parallel ridges or a washboard texture on the surface. In hand planing it is caused by a loose iron, a poorly seated chip breaker, or too heavy a cut. In machine work it can come from a dull bit, a loose workpiece, or a worn spindle bearing. The fix is usually to reduce cutting depth, sharpen the tool, or improve the rigidity of the setup.',
+   def:'Chatter is the rapid vibration of a cutting tool during a cut, leaving a series of parallel ridges or a washboard texture on the surface. In hand planing it is caused by a loose iron, a poorly seated chip breaker, or too heavy a cut. In machine work it can come from a dull bit, a loose workpiece, or a worn spindle bearing.',
    rel:['tearout'],tags:[{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'end-grain',name:'End Grain',cat:'milling',
+  {id:'end-grain',name:'End Grain',cat:'wood',
    short:'The cross-section of a board exposing the cut ends of the wood fibers',
-   def:'End grain is the surface exposed when a board is cut across its width. It is highly absorbent and difficult to finish evenly because the open fiber ends soak up finish rapidly. It is also harder to plane cleanly than face grain. Cutting boards deliberately expose end grain for durability. End grain glue joints have very low strength because the glue is absorbed into the fibers rather than bonding face to face.',
+   def:'End grain is the surface exposed when a board is cut across its width. It is highly absorbent and difficult to finish evenly because the open fiber ends soak up finish rapidly. End grain glue joints have very low strength because the glue is absorbed into the fibers rather than bonding face to face.',
    rel:['grain','long-grain'],tags:[]},
-  {id:'long-grain',name:'Long Grain',cat:'milling',
+  {id:'long-grain',name:'Long Grain',cat:'wood',
    short:'A surface or edge running parallel to the length of the board and the wood fibers',
-   def:'Long grain refers to any surface where the wood fibers run along the length of the board. Long grain to long grain glue joints are extremely strong because the glue bonds across the fiber surfaces. Face grain and edge grain are both long grain surfaces. Long grain planes cleanly with a sharp iron working in the direction of the grain.',
+   def:'Long grain refers to any surface where the wood fibers run along the length of the board. Long grain to long grain glue joints are extremely strong because the glue bonds across the fiber surfaces. Face grain and edge grain are both long grain surfaces.',
    rel:['grain','end-grain'],tags:[]},
-  {id:'stock',name:'Stock',cat:'milling',
+  {id:'stock',name:'Stock',cat:'wood',
    short:'Raw or dimensioned lumber before final cutting to a specific part size',
-   def:'Stock refers to lumber in any stage before it becomes a finished part. Rough stock is lumber as it comes from the sawmill, with saw marks and uneven surfaces. Dimensioned stock has been surfaced on all four sides to consistent thickness and width. Working stock is dimensioned lumber cut slightly oversize, waiting to be trimmed to final dimensions. The term is also used generically to mean any wood material being worked.',
+   def:'Stock refers to lumber in any stage before it becomes a finished part. Rough stock is lumber as it comes from the sawmill. Dimensioned stock has been surfaced on all four sides to consistent thickness and width. Working stock is dimensioned lumber cut slightly oversize, waiting to be trimmed to final dimensions.',
    rel:['grain','refface'],tags:[]},
-  {id:'carcass',name:'Carcass',cat:'joinery-t',
+  {id:'carcass',name:'Carcass',cat:'joinery',
    short:'The main structural box of a cabinet, before face frames, doors, or drawers are fitted',
-   def:'The carcass is the primary box structure of a cabinet: the top, bottom, sides, and back assembled into a rigid unit. Face frames, doors, drawer fronts, and moldings are all added to the carcass. A strong, square carcass is the foundation of a well-made cabinet. The carcass is built first and everything else is fitted to it.',
+   def:'The carcass is the primary box structure of a cabinet: the top, bottom, sides, and back assembled into a rigid unit. Face frames, doors, drawer fronts, and moldings are all added to the carcass. A strong, square carcass is the foundation of a well-made cabinet.',
    rel:['dado','mortise'],tags:[]},
-  {id:'face-frame',name:'Face Frame',cat:'joinery-t',
+  {id:'face-frame',name:'Face Frame',cat:'joinery',
    short:'A flat frame of vertical stiles and horizontal rails applied to the front of a cabinet carcass',
-   def:'A face frame is a flat rectangular frame glued to the front of a cabinet carcass. It is made of stiles (vertical members) and rails (horizontal members), typically solid wood even when the carcass is plywood. The face frame covers the exposed plywood edges, provides a mounting surface for doors and drawers, and gives the cabinet a furniture-quality appearance.',
+   def:'A face frame is a flat rectangular frame glued to the front of a cabinet carcass. It is made of stiles (vertical members) and rails (horizontal members), typically solid wood even when the carcass is plywood. The face frame covers the exposed plywood edges and provides a mounting surface for doors and drawers.',
    rel:['dado'],tags:[{l:'Pocket Screw Joint',f:'pocket'},{l:'Stile',f:'stile'},{l:'Rail',f:'rail'}]},
-  {id:'stile',name:'Stile',cat:'joinery-t',
+  {id:'stile',name:'Stile',cat:'joinery',
    short:'A vertical member of a frame, door, or face frame',
    def:'A stile is a vertical structural member in a frame and panel assembly, a door, or a face frame. In a face frame the stiles run the full height of the cabinet. In a door the stiles run the full height and the rails fit between them. Mortises for rail tenons are typically cut into the stiles.',
    rel:['mortise','tenon'],tags:[{l:'Rail',f:'rail'},{l:'Face Frame',f:'face-frame'}]},
-  {id:'rail',name:'Rail',cat:'joinery-t',
+  {id:'rail',name:'Rail',cat:'joinery',
    short:'A horizontal member of a frame, door, or face frame',
    def:'A rail is a horizontal structural member in a frame and panel assembly, a door, or a face frame. Rails run horizontally between the stiles at the top, bottom, and sometimes the middle of a door or frame. Rails usually carry the tenons that fit into mortises in the stiles.',
    rel:['mortise','tenon'],tags:[{l:'Stile',f:'stile'},{l:'Face Frame',f:'face-frame'}]},
@@ -1090,11 +1089,11 @@ const T=[
    rel:['grain'],tags:[]},
   {id:'open-grain',name:'Open Grain',cat:'finishing',
    short:'Wood with large visible pores requiring a grain filler for a smooth film finish',
-   def:'Open grain wood has large pores visible to the naked eye that create a textured surface. Oak, ash, walnut, and mahogany are open grain species. A film finish applied directly over open grain will telegraph the pore texture. For a glassy smooth finish, the pores must be filled with a grain filler paste before topcoating. Oil finishes on open grain produce a natural look that emphasizes the texture.',
+   def:'Open grain wood has large pores visible to the naked eye that create a textured surface. Oak, ash, walnut, and mahogany are open grain species. A film finish applied directly over open grain will telegraph the pore texture. For a glassy smooth finish, the pores must be filled with a grain filler paste before topcoating.',
    rel:['grain'],tags:[{l:'Surface Preparation',f:'prep'}]},
   {id:'topcoat',name:'Topcoat',cat:'finishing',
    short:'The final protective film finish layer applied over stain, sealer, or previous coats',
-   def:'A topcoat is the outermost layer of a finishing system, providing the final appearance and protection. Common topcoats include polyurethane, lacquer, shellac, and oil-based varnish. The topcoat provides the sheen level (matte, satin, semi-gloss, or gloss). It is applied over a sealed or stained surface. Between coats, light sanding with 320 to 400 grit removes dust nibs and improves adhesion.',
+   def:'A topcoat is the outermost layer of a finishing system, providing the final appearance and protection. Common topcoats include polyurethane, lacquer, shellac, and oil-based varnish. The topcoat provides the sheen level (matte, satin, semi-gloss, or gloss). Between coats, light sanding with 320 to 400 grit removes dust nibs and improves adhesion.',
    rel:['grain'],tags:[{l:'Polyurethane',f:'poly'},{l:'Shellac',f:'shellac'}]},
   {id:'bow',name:'Bow',cat:'milling',
    short:'A lengthwise curve along the face of a board',
@@ -1106,75 +1105,75 @@ const T=[
    rel:['winding','grain'],tags:[]},
   {id:'spring',name:'Spring (Crook)',cat:'milling',
    short:'A lengthwise curve along the edge of a board',
-   def:'Spring, also called crook, is a curvature along the length of a board visible when sighting down the edge. The edge curves left or right rather than running straight. A spring board can be straightened by jointing the edge. Severe spring wastes width and is more common in flatsawn boards cut near the outside of a log.',
+   def:'Spring, also called crook, is a curvature along the length of a board visible when sighting down the edge. The edge curves left or right rather than running straight. A spring board can be straightened by jointing the edge. Severe spring wastes width.',
    rel:['bow','grain'],tags:[]},
   {id:'warp',name:'Warp',cat:'milling',
    short:'Any distortion from flat in a board, including bow, cup, twist, or spring',
    def:'Warp is a general term covering any deviation from flat or straight in a board. Specific types include bow (lengthwise face curve), cup (widthwise face curve), twist or winding (diagonal distortion), and spring or crook (edge curve). Warp is caused by uneven drying, growth stresses, or moisture changes after drying.',
    rel:['bow','cup','winding'],tags:[]},
-  {id:'figure',name:'Figure',cat:'sawing',
+  {id:'figure',name:'Figure',cat:'wood',
    short:'Decorative visual patterns in wood caused by grain irregularities or cut angle',
    def:'Figure is any visually distinctive pattern in wood beyond straight grain. Common types include curly or tiger figure (wavy alternating light and dark bands), birds eye (small circular patterns common in maple), quilted figure (three-dimensional puffy appearance), ray fleck (silver flashes on quartersawn oak), and crotch figure (feathered pattern from branch junctions). Highly figured wood is more difficult to plane and finish without tearout.',
    rel:['grain','tearout'],tags:[]},
-  {id:'workpiece',name:'Workpiece',cat:'measurement',
+  {id:'workpiece',name:'Workpiece',cat:'measuring',
    short:'The specific piece of wood being cut, shaped, or assembled at any given moment',
-   def:'The workpiece is the piece of wood actively being worked on. In a multi-part project each component is the workpiece when it is being dimensioned, jointed, or shaped. The term distinguishes the wood being cut from the bench, the jig, the fence, or other fixtures that support or guide the cut.',
+   def:'The workpiece is the piece of wood actively being worked on. In a multi-part project each component is the workpiece when it is being dimensioned, jointed, or shaped. The term distinguishes the wood being cut from the bench, the jig, the fence, or other fixtures.',
    rel:['jig','fixture'],tags:[]},
   {id:'grit',name:'Grit',cat:'finishing',
    short:'The abrasive particle size rating on sandpaper, with lower numbers being coarser',
-   def:'Grit is the number that indicates the size of abrasive particles on sandpaper or sharpening stones. Lower numbers (60, 80, 120) are coarse and remove material quickly. Higher numbers (180, 220, 320, 400) are fine and leave smoother surfaces. A typical sanding sequence might be 80 to 120 to 180 to 220 before finishing. For sharpening, stones are rated from coarse (120 to 400) through medium (1000 to 2000) to fine (4000 to 8000 and above).',
+   def:'Grit is the number that indicates the size of abrasive particles on sandpaper or sharpening stones. Lower numbers (60, 80, 120) are coarse and remove material quickly. Higher numbers (180, 220, 320, 400) are fine and leave smoother surfaces. A typical sanding sequence for raw wood might be 80 to 120 to 180 to 220 before finishing.',
    rel:['grain-raising'],tags:[]},
-  {id:'level',name:'Level',cat:'measurement',
+  {id:'level',name:'Level',cat:'measuring',
    short:'Perfectly horizontal, with no slope in any direction',
-   def:'Level means perfectly horizontal, confirmed with a spirit level or water level. A level surface has no tilt or slope. In shop work, checking that a glue-up is level prevents the assembly from drying with a built-in twist. Workbenches and machinery need to be level for accurate work. Level is distinct from plumb (vertical) and flat (no deviation from a plane).',
+   def:'Level means perfectly horizontal, confirmed with a spirit level or water level. In shop work, checking that a glue-up is level prevents the assembly from drying with a built-in twist. Workbenches and machinery need to be level for accurate work.',
    rel:['winding','refface'],tags:[]},
-  {id:'taper',name:'Taper',cat:'sawing',
+  {id:'taper',name:'Taper',cat:'cutting',
    short:'A gradual reduction in width or thickness along the length of a workpiece',
-   def:'A taper is a uniform reduction in dimension along the length or width of a piece, such as a tapered table leg that is square at the top and narrower at the foot. Tapers can be cut on the table saw with a taper jig, on the band saw, or by hand with a plane. A taper jig holds the workpiece at a fixed angle to the blade to produce a consistent cut.',
+   def:'A taper is a uniform reduction in dimension along the length or width of a piece, such as a tapered table leg that is square at the top and narrower at the foot. Tapers can be cut on the table saw with a taper jig, on the band saw, or by hand with a plane.',
    rel:['jig','fence'],tags:[]},
-  {id:'shooting',name:'Shooting',cat:'sawing',
+  {id:'shooting',name:'Shooting',cat:'cutting',
    short:'Planing an end or edge perfectly square using a shooting board',
-   def:'Shooting is the technique of using a bench plane on its side, running along a shooting board, to trim an end or edge perfectly square or at a precise angle. The shooting board acts as a fence and reference surface. A sharp plane is used to take very thin shavings until the end grain is flat and square. Shooting is the most reliable way to fit joints and square up small parts.',
+   def:'Shooting is the technique of using a bench plane on its side, running along a shooting board, to trim an end or edge perfectly square or at a precise angle. The shooting board acts as a fence and reference surface. A sharp plane is used to take very thin shavings until the end grain is flat and square.',
    rel:['refface','sole'],tags:[{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'datum',name:'Datum',cat:'measurement',
+  {id:'datum',name:'Datum',cat:'measuring',
    short:'A reference surface or point from which all measurements and cuts are made',
-   def:'A datum is any established reference surface, edge, or point used as the basis for all subsequent measurements and cuts. In milling, the face side and face edge are the primary datum surfaces. All thickness and width cuts reference back to them. Using a consistent datum ensures that all parts are square to each other. Working without a clear datum is a primary cause of parts that do not fit.',
+   def:'A datum is any established reference surface, edge, or point used as the basis for all subsequent measurements and cuts. In milling, the face side and face edge are the primary datum surfaces. All thickness and width cuts reference back to them. Working without a clear datum is a primary cause of parts that do not fit.',
    rel:['refface','fence'],tags:[]},
   {id:'squeeze-out',name:'Squeeze-Out',cat:'finishing',
    short:'Excess glue forced out of a joint under clamping pressure',
-   def:'Squeeze-out is the glue that emerges from a joint when clamping pressure forces excess adhesive out of the glue line. A small amount of squeeze-out indicates adequate glue coverage and pressure. Too much means excess glue was applied. PVA squeeze-out is easiest to clean up after it gels to a rubbery consistency (about 30 to 45 minutes). Do not wipe wet PVA with a damp rag as it spreads glue into the grain and creates a finishing problem.',
+   def:'Squeeze-out is the glue that emerges from a joint when clamping pressure forces excess adhesive out of the glue line. A small amount of squeeze-out indicates adequate glue coverage and pressure. PVA squeeze-out is easiest to clean up after it gels to a rubbery consistency (about 30 to 45 minutes). Do not wipe wet PVA with a damp rag as it spreads glue into the grain.',
    rel:['grain'],tags:[]},
-  {id:'miter',name:'Miter',cat:'sawing',
+  {id:'miter',name:'Miter',cat:'cutting',
    short:'A cut made at an angle across the width of a board, most commonly 45 degrees',
    def:'A miter is an angled crosscut made across the face or edge of a workpiece. Two mitered pieces joined together create a corner that hides the end grain of both pieces. Miters require precise cutting and fitting because any error in the angle doubles at the corner.',
    rel:['crosscut','rebate'],tags:[]},
-  {id:'heartwood',name:'Heartwood',cat:'sawing',
+  {id:'heartwood',name:'Heartwood',cat:'wood',
    short:'The darker, denser inner wood at the center of the tree',
-   def:'Heartwood is the older inner wood of a tree that has been chemically transformed as the tree grew. It is typically darker, denser, and more rot-resistant than the surrounding sapwood. In species like black locust, osage orange, and teak the heartwood is extremely durable outdoors. In walnut and cherry the heartwood provides the characteristic dark color.',
+   def:'Heartwood is the older inner wood of a tree that has been chemically transformed as the tree grew. It is typically darker, denser, and more rot-resistant than the surrounding sapwood. In species like black locust, osage orange, and teak the heartwood is extremely durable outdoors.',
    rel:['grain'],tags:[]},
-  {id:'sapwood',name:'Sapwood',cat:'sawing',
+  {id:'sapwood',name:'Sapwood',cat:'wood',
    short:'The lighter outer wood near the bark that actively transports water and nutrients',
-   def:'Sapwood is the living outer layer of a tree that conducts water and nutrients from roots to leaves. It is typically lighter in color and less rot-resistant than the heartwood. In black walnut the pale sapwood is often removed or filled with epoxy in finished pieces. Sapwood is more prone to insect damage and rot in outdoor applications.',
+   def:'Sapwood is the living outer layer of a tree that conducts water and nutrients from roots to leaves. It is typically lighter in color and less rot-resistant than the heartwood. Sapwood is more prone to insect damage and rot in outdoor applications.',
    rel:['grain','heartwood'],tags:[]},
-  {id:'chamfer',name:'Chamfer',cat:'sawing',
+  {id:'chamfer',name:'Chamfer',cat:'cutting',
    short:'A small angled flat cut along an edge or corner, typically at 45 degrees',
    def:'A chamfer is a flat angled surface cut along an edge or corner, most commonly at 45 degrees. It removes the sharp corner for comfort and visual softening, and is also cut on the ends of tenons and the lead-in of mortises to ease assembly. Chamfers can be cut with a plane, a chisel, a router, or a table saw.',
    rel:['bevel','rebate'],tags:[{l:'Bench Plane',f:'bench-plane'},{l:'Router',f:'router'}]},
-  {id:'frog',name:'Frog',cat:'sawing',
+  {id:'frog',name:'Frog',cat:'tools',
    short:'The angled casting inside a bench plane that holds the iron at the cutting angle',
-   def:'The frog is the machined cast iron seat inside a bench plane that holds the plane iron and chip breaker assembly at the correct bed angle (45 degrees on standard bench planes). The frog can be moved forward or backward by a setscrew to adjust the width of the mouth opening. A well-fitted frog that is fully in contact with the plane body is essential for reducing chatter.',
+   def:'The frog is the machined cast iron seat inside a bench plane that holds the plane iron and chip breaker assembly at the correct bed angle (45 degrees on standard bench planes). The frog can be moved forward or backward by a setscrew to adjust the width of the mouth opening. A well-fitted frog in full contact with the plane body is essential for reducing chatter.',
    rel:['iron','chip-breaker','mouth','chatter'],tags:[{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'microbevel',name:'Microbevel',cat:'sawing',
+  {id:'microbevel',name:'Microbevel',cat:'tools',
    short:'A secondary bevel honed at a slightly steeper angle than the primary grind',
-   def:'A microbevel is a very narrow secondary bevel honed at 2 to 5 degrees steeper than the primary bevel. Because only the microbevel contacts the stone, sharpening is faster. When the microbevel becomes too wide (after several sharpenings), the primary bevel is reground and a fresh microbevel is established. Most woodworkers use a primary bevel of 25 degrees and a microbevel of 30 degrees on chisels and plane irons.',
+   def:'A microbevel is a very narrow secondary bevel honed at 2 to 5 degrees steeper than the primary bevel. Because only the microbevel contacts the stone, sharpening is faster. When the microbevel becomes too wide, the primary bevel is reground and a fresh microbevel is established. Most woodworkers use a primary bevel of 25 degrees and a microbevel of 30 degrees on chisels and plane irons.',
    rel:['bevel','burnishing'],tags:[{l:'Bench Chisel',f:'chisel'},{l:'Bench Plane',f:'bench-plane'}]},
-  {id:'burnisher',name:'Burnisher',cat:'sawing',
+  {id:'burnisher',name:'Burnisher',cat:'tools',
    short:'A hardened smooth steel rod used to turn a burr on a card scraper',
-   def:'A burnisher is a hardened steel rod used to turn the cutting burr on a card scraper. After the scraper edge is filed square and the corners are broken, the burnisher is drawn along the edge at a slight angle (about 5 to 10 degrees from flat) with firm pressure to roll a thin hook of steel over the edge. This hook is the cutting burr that does the work.',
+   def:'A burnisher is a hardened steel rod used to turn the cutting burr on a card scraper. After the scraper edge is filed square and the corners are broken, the burnisher is drawn along the edge at a slight angle with firm pressure to roll a thin hook of steel over the edge. This hook is the cutting burr that does the work.',
    rel:['burnishing'],tags:[{l:'Card Scraper',f:'card-scraper'}]},
   {id:'open-time',name:'Open Time',cat:'finishing',
    short:'The working time available after glue is applied before it begins to set',
-   def:'Open time is the period after glue application during which parts can still be moved and adjusted before the adhesive begins to set. PVA yellow glue has an open time of about 5 to 15 minutes depending on temperature and humidity. Hide glue is 3 to 5 minutes. Epoxy open time varies widely by formulation from 5 minutes to several hours. Complex assemblies must be completed within the open time, making dry-fit rehearsals essential.',
+   def:'Open time is the period after glue application during which parts can still be moved and adjusted before the adhesive begins to set. PVA yellow glue has an open time of about 5 to 15 minutes. Hide glue is 3 to 5 minutes. Epoxy open time varies widely from 5 minutes to several hours. Complex assemblies must be completed within the open time, making dry-fit rehearsals essential.',
    rel:['grain'],tags:[{l:'Hide Glue',f:'hide-glue'},{l:'PVA / Yellow Glue',f:'pva'}]}];
 
 const TOOLS=[
@@ -1195,35 +1194,83 @@ const TOOLS=[
    short:'Jig for drilling angled pocket holes for pocket screw joinery',
    use:'Cabinet construction, face frames, furniture assembly',
    ease:'Easy',
-   body:'A pocket hole jig guides a stepped drill bit at a precise angle into a workpiece, creating an angled pocket and pilot hole in one operation. The Kreg Jig is the most common brand. The bit drills a counterbored pocket at roughly 15 degrees, angled toward the face of the mating piece. A coarse-threaded self-tapping screw pulls the joint tight without glue, though glue can be added for strength. Pocket screw joinery is fast and requires no clamping time, making it popular for cabinet boxes and face frames. It is a mechanical joint, not a traditional woodworking joint. Strength comes from the screw, not wood-to-wood geometry.',
-   terms:[{l:'Pocket Hole',f:'pocket-hole'},{l:'Shear',f:'shear'}]}];
+   body:'A pocket hole jig guides a stepped drill bit at a precise angle into a workpiece, creating an angled pocket and pilot hole in one operation. The Kreg Jig is the most common brand. The bit drills a counterbored pocket at roughly 15 degrees, angled toward the face of the mating piece. A coarse-threaded self-tapping screw pulls the joint tight without glue, though glue can be added for strength. Pocket screw joinery is fast and requires no clamping time, making it popular for cabinet boxes and face frames.',
+   terms:[{n:'Pocket Hole',id:'pocket-hole'},{n:'Shear',id:'shear'}]}];
 
 const WOOD=[
-  {id:'white-oak',name:'White Oak',type:'hardwood',region:'na',janka:1360,food:true,short:'Durable, tight-grained, excellent for outdoor and furniture work',desc:'White oak is a premier hardwood for furniture, cooperage, and outdoor applications. Its pores are filled with tyloses, making it highly water-resistant.',work:'Works well with hand tools and power tools. Prone to surface checking if dried too rapidly.',finish:'Takes oil, wax, and film finishes well. Tannins react with iron, avoid iron clamps on wet glue joints.',dry:'Air dry 1 year per inch of thickness minimum.',uses:'Outdoor furniture, flooring, barrels, boat building, cabinetry'},
-  {id:'cherry',name:'American Black Cherry',type:'hardwood',region:'na',janka:950,food:true,short:'Fine-grained, ages beautifully, a favorite for furniture and carving',desc:'Cherry is one of the most prized American hardwoods. It works easily, finishes beautifully, and deepens to a rich reddish-brown with UV exposure over time.',work:'A pleasure to work by hand or machine. Planes cleanly, takes crisp joinery, and responds well to carving.',finish:'Minimal finishing needed. Oil alone produces a beautiful result. Avoid heavy stains, cherry colors itself over time.',dry:'Dries relatively easily. Prone to warping if not stickered well.',uses:'Furniture, cabinetry, carving, kitchen utensils'},
-  {id:'walnut',name:'American Black Walnut',type:'hardwood',region:'na',janka:1010,food:true,short:'Rich, dark, the American furniture wood',desc:'Black walnut is the prestige wood of American furniture making. Deep chocolate brown heartwood, relatively easy to work.',work:'Generally easy with hand tools and power tools. Sawdust is a mild irritant, dust mask recommended.',finish:'Oils bring out the depth. Danish oil, tung oil, or paste wax all work beautifully.',dry:'Dries well but can be slow.',uses:'Furniture, cabinetry, gunstocks, carvings, cutting boards'},
-  {id:'maple',name:'Hard Maple',type:'hardwood',region:'na',janka:1450,food:true,short:'Dense, pale, and resilient, the benchmark hardwood for work surfaces',desc:'Hard maple is the workbench and butcher block wood, dense, tight-grained, and resistant to wear.',work:'Harder to work by hand than cherry or walnut. Requires very sharp tools.',finish:'Takes all finishes well. Can blotch with oil stains, use a conditioner first.',dry:'Dries relatively slowly. Prone to surface checking.',uses:'Workbenches, butcher blocks, cutting boards, tool handles, flooring'},
-  {id:'basswood',name:'Basswood',type:'hardwood',region:'na',janka:410,food:true,short:'Soft hardwood ideal for carving and prototyping',desc:"Basswood is technically a hardwood but softer than many softwoods. Its fine, even grain makes it the go-to wood for carving.",work:'Carves exceptionally well in all directions. Planes easily.',finish:'Takes paint and gesso extremely well.',dry:'Dries quickly and easily.',uses:'Carving, sculpture, prototyping, model making, painted pieces'},
-  {id:'ash',name:'White Ash',type:'hardwood',region:'na',janka:1320,food:true,short:'Tough, flexible, ring-porous, the tool handle wood',desc:'White ash is the traditional wood for tool handles due to its exceptional shock resistance and flexibility.',work:'Works well with hand tools and machines.',finish:'Takes stain and oil well. Open pores need filling for a mirror-smooth finish.',dry:'Dries without significant difficulty.',uses:'Tool handles, sports equipment, furniture, steam-bent work'},
-  {id:'european-oak',name:'European Oak',type:'hardwood',region:'eu',janka:1360,food:true,short:'The old-world equivalent to white oak',desc:'European oak shares many properties with white oak: high tannin content, tight grain, excellent durability.',work:'Similar to white oak. Works well with hand tools and power tools.',finish:'Oil and wax are the traditional choices.',dry:'Needs careful drying. Historically air-dried for years.',uses:'Fine furniture, cooperage, timber framing, flooring'},
-
+  {id:'white-oak',name:'White Oak',type:'hardwood',region:'na',janka:1360,food:true,
+   short:'The benchmark American hardwood for furniture and outdoor structures',
+   desc:'White oak is one of the most versatile and important American hardwoods. Its tyloses (cellular plugs) make it waterproof, suitable for cooperage, outdoor furniture, and boat building. Quartersawn white oak shows dramatic ray fleck.',
+   work:'Works well with hand tools and machines. Tannins react with iron fasteners and water-based finishes, leaving black stains. Use stainless or coated fasteners outdoors.',
+   finish:'Takes oil finishes beautifully. Water-based finishes can raise the grain and react with tannins. Film finishes work well with proper preparation.',
+   dry:'Dries slowly. Must be stickered carefully. End checks are common if not sealed promptly.',
+   uses:'Fine furniture, cooperage, timber framing, flooring'},
+  {id:'cherry',name:'American Black Cherry',type:'hardwood',region:'na',janka:950,food:true,
+   short:'The American fine furniture wood, warm reddish-brown, excellent workability',
+   desc:'American black cherry is the prestige domestic hardwood for fine furniture. Its color deepens dramatically with UV exposure from light tan to a rich reddish-brown over the first year or two.',
+   work:'Works very well by hand and machine. Fine straight grain, low blunting effect on tools. Prone to blotching with stain -- use a washcoat first or finish natural.',
+   finish:'Oils, shellac, and lacquer all produce excellent results. Avoid staining -- the natural color development is the point. UV exposure deepens the color faster.',
+   dry:'Dries moderately well. Some movement. Allow adequate acclimation time.',
+   uses:'Fine furniture, cabinets, musical instruments, turned objects, carving'},
+  {id:'walnut',name:'American Black Walnut',type:'hardwood',region:'na',janka:1010,food:true,
+   short:'The premium American hardwood, rich chocolate brown, works like a dream',
+   desc:'Black walnut is the prestige American hardwood for gun stocks, fine furniture, and turnings. Rich dark chocolate color, often with purple-gray tones in the heartwood. Sapwood is pale cream and is often removed or stabilized.',
+   work:'Excellent workability by hand and machine. Low blunting effect. Open grain cuts cleanly. One of the most pleasant woods to work with hand tools.',
+   finish:'Takes all finishes well. Oil finishes produce a beautiful result. The open grain fills well with danish oil or danish oil plus a topcoat. Avoid water-based finishes which can raise grain.',
+   dry:'Dries well but can be slow. Some movement.',
+   uses:'Fine furniture, gun stocks, turned objects, veneer, musical instruments'},
+  {id:'maple',name:'Hard Maple',type:'hardwood',region:'na',janka:1450,food:true,
+   short:'Dense, fine-grained, the benchmark for cutting boards and workhorse furniture',
+   desc:'Hard maple (sugar maple) is one of the densest and hardest North American hardwoods. Fine straight grain, very smooth surface when worked properly. Often shows figure in curly, quilted, and birds eye forms.',
+   work:'Requires sharp tools. Planes and machines well but dulls edges faster than softer species. Router burns easily -- use sharp bits, high feed rate. Does not respond well to dull tools.',
+   finish:'Stains blotch badly without a washcoat or conditioner first. Oil finishes and clear film finishes produce excellent results on natural maple. Figure shows best under an oil finish.',
+   dry:'Dries reasonably well. Moderate movement.',
+   uses:'Cutting boards, butcher blocks, furniture, flooring, turned objects, workbenches'},
+  {id:'basswood',name:'Basswood',type:'hardwood',region:'na',janka:410,food:true,
+   short:'The carver wood, soft, fine-grained, holds detail well',
+   desc:'Basswood is technically a hardwood but is softer than most softwoods. Very fine, consistent grain that holds crisp carving detail. The standard wood for chip carving, relief carving, and figure carving.',
+   work:'Cuts easily with any sharp tool. Very forgiving for carving. Dents and scratches easily in use.',
+   finish:'Takes paint well. Stains unevenly. Not a natural-finish wood for furniture due to its plain appearance.',
+   dry:'Dries quickly and easily with minimal movement.',
+   uses:'Carving, prototyping, musical instruments, painted furniture, model making'},
+  {id:'ash',name:'White Ash',type:'hardwood',region:'na',janka:1320,food:true,
+   short:'Tough, elastic, ring-porous, the traditional tool handle and baseball bat wood',
+   desc:'White ash is the traditional wood for tool handles, baseball bats, and bent furniture parts. Its combination of strength, stiffness, and shock resistance makes it ideal for striking tools. Ring-porous open grain similar to oak.',
+   work:'Works well by hand and machine. Open grain requires filling for a smooth film finish. Steam bends well.',
+   finish:'Takes stain extremely well, similar to red oak. Open grain needs filling for a glass smooth film finish. Oil finishes are excellent.',
+   dry:'Dries well with moderate movement.',
+   uses:'Tool handles, sporting goods, bent furniture, flooring, turned objects'},
+  {id:'european-oak',name:'European Oak',type:'hardwood',region:'eu',janka:1360,food:true,
+   short:'The traditional European furniture and barrel wood, similar to American white oak',
+   desc:'European oak (Quercus robur and Q. petraea) is the traditional hardwood of European furniture making and cooperage. Very similar to American white oak in properties and appearance. Wide quartersawn ray fleck is often more pronounced than American species.',
+   work:'Works well by hand and machine. Same tannin reactivity as American white oak -- avoid iron fasteners and water-based finishes without preparation.',
+   finish:'Takes oil finishes beautifully. Ray fleck is spectacular under an oil or penetrating finish.',
+   dry:'Dries slowly. Careful stickering required.',
+   uses:'Furniture, flooring, cooperage, timber framing'},
+  {id:'pine',name:'Eastern White Pine',type:'softwood',region:'na',janka:380,food:true,
+   short:'The original American softwood, easy to work, historically important',
+   desc:'Eastern white pine was the foundational softwood of American construction and furniture history. Light, straight-grained, easy to work with any tool.',
+   work:'Cuts and planes easily. Resins can build up on saw blades -- clean periodically with mineral spirits.',
+   finish:'Paints exceptionally well with a shellac primer for knot sealing.',
+   dry:'Dries quickly. End seal immediately. Knots may continue weeping resin for years.',
+   uses:'Construction framing, painted furniture, jigs and shop fixtures, box making, carving'},
   {id:'red-oak',name:'Red Oak',type:'hardwood',region:'na',janka:1290,food:true,
    short:'The most common American hardwood, open-grained, strong, widely available',
    desc:'Red oak is the most commercially available hardwood in North America. Strong, relatively easy to work, and inexpensive. Unlike white oak, its open pores make it less suitable for outdoor use and cooperage.',
    work:'Works well with hand tools and machines. Open grain requires a grain filler for a smooth film finish.',
    finish:'Takes stain extremely well and evenly, one of the best species for staining. Open grain needs filling for film finishes.',
    dry:'Dries moderately well. Prone to checking at the ends if not sealed promptly.',
-   uses:'Furniture, cabinetry, flooring, millwork, the workhorse of American production furniture'},
+   uses:'Furniture, cabinetry, flooring, millwork'},
   {id:'birch',name:'Yellow Birch',type:'hardwood',region:'na',janka:1260,food:true,
    short:'Fine-grained, pale, strong, a good substitute for maple at lower cost',
    desc:'Yellow birch is a fine-grained, light-colored hardwood similar to hard maple but typically less expensive. Commonly used for painted furniture and cabinet interiors.',
    work:'Works well with hand tools and machines. Similar to maple, requires sharp tools. Prone to blotching with stain.',
-   finish:'Paints exceptionally well. For natural finishes, use a wood conditioner first. Takes oil and film finishes well once conditioned.',
+   finish:'Paints exceptionally well. For natural finishes, use a wood conditioner first to prevent blotching.',
    dry:'Dries without major difficulty.',
    uses:'Furniture, cabinet interiors, plywood face veneers, painted pieces, turned objects'},
   {id:'hickory',name:'Shagbark Hickory',type:'hardwood',region:'na',janka:1820,food:true,
    short:'The hardest and toughest common American hardwood, the tool handle wood',
-   desc:'Hickory is among the hardest and toughest North American hardwoods. Its combination of hardness, strength, and flexibility makes it the premier wood for tool handles.',
+   desc:'Hickory is among the hardest and toughest North American hardwoods. Its combination of hardness, strength, and flexibility makes it the premier wood for tool handles, particularly striking tools.',
    work:'Difficult to work by hand, very tough on cutting edges. Machines well but dulls blades quickly.',
    finish:'Takes stain and oil well.',
    dry:'Must be dried carefully, prone to checking. End seal promptly.',
@@ -1245,8 +1292,8 @@ const WOOD=[
   {id:'teak',name:'Teak',type:'hardwood',region:'asia',janka:1155,food:false,
    short:'The outdoor furniture standard, oily, dense, extremely weather-resistant',
    desc:'Teak is one of the most weather-resistant hardwoods in the world. Its natural oils protect it from moisture, insects, and decay even without finish.',
-   work:'Difficult, silica content dulls cutting edges rapidly. Wipe surfaces with acetone before gluing, natural oils prevent adhesion.',
-   finish:'Needs no finish for outdoor use. For indoor use, Danish oil maintains appearance after an acetone wipe.',
+   work:'Difficult, silica content dulls cutting edges rapidly. Wipe surfaces with acetone before gluing, the natural oils prevent adhesion.',
+   finish:'Needs no finish for outdoor use. For indoor use, danish oil maintains appearance after an acetone wipe.',
    dry:'Imported teak is typically kiln-dried.',
    uses:'Outdoor and marine furniture, boat decking, garden furniture, flooring'},
   {id:'poplar',name:'Tulip Poplar',type:'hardwood',region:'na',janka:540,food:true,
@@ -1298,14 +1345,6 @@ const WOOD=[
    finish:'The natural color is the finish. Oil enhances the deep orange.',
    dry:'Dries slowly. Must be sealed promptly to prevent checking.',
    uses:'Tool handles, fence posts, archery bows, turned objects, knife handles'},
-  {id:'white-pine',name:'Eastern White Pine',type:'softwood',region:'na',janka:380,food:true,
-   short:'The original American softwood, easy to work, historically important, widely available',
-   desc:'Eastern white pine was the foundational softwood of American construction and furniture history. Light, straight-grained, easy to work with any tool.',
-   work:'Cuts and planes easily. Resins can build up on saw blades, clean periodically with mineral spirits.',
-   finish:'Paints exceptionally well with a shellac primer for knot sealing.',
-   dry:'Dries quickly. End seal immediately. Knots may continue weeping resin for years.',
-   uses:'Construction framing, painted furniture, jigs and shop fixtures, box making, carving'},
-
   {id:'purpleheart',name:'Purpleheart',type:'hardwood',region:'tropical',janka:2520,food:false,
    short:'Striking violet-purple color, extremely hard, rot-resistant South American hardwood',
    desc:'Purpleheart (Peltogyne spp.) is one of the most visually distinctive hardwoods. Freshly cut surfaces rapidly oxidize to a vivid purple in sunlight. Color fades to a brownish-purple over time, a UV-inhibiting finish maintains the color longest.',
@@ -1316,20 +1355,20 @@ const WOOD=[
   {id:'lignum-vitae',name:'Lignum Vitae',type:'hardwood',region:'tropical',janka:4500,food:false,
    short:'The hardest and densest commercially available wood, self-lubricating, used for bearings and mallets',
    desc:'Lignum vitae (wood of life) is the hardest wood in commercial use. So dense it sinks in water. Its natural guaiacum resin makes it self-lubricating, historically used for ship propeller shaft bearings. The interlocked grain makes splitting nearly impossible.',
-   work:'Extremely difficult to work. Requires very sharp carbide tools. Interlocked grain makes splitting nearly impossible, part of its value for mallet heads.',
+   work:'Extremely difficult to work. Requires very sharp carbide tools.',
    finish:'The natural resin content is its own protection. Light oil or wax is all that is needed.',
    dry:'Must be dried extremely slowly. Prone to severe checking if dried too fast.',
    uses:'Carver mallet heads, plane knobs and totes, bearings, bowling balls, croquet mallets, turned objects'},
   {id:'padauk',name:'African Padauk',type:'hardwood',region:'tropical',janka:1725,food:false,
    short:'Brilliant orange-red color, stable, strong, and easier to work than most exotics',
-   desc:'African padauk (Pterocarpus soyauxii) is one of the most stable tropical hardwoods. The vivid orange-red color fades to a darker reddish-brown with UV exposure, similar to purpleheart.',
-   work:'Generally easy to work for an exotic, less resinous than teak, less hard than purpleheart. Dust and particles can cause skin irritation.',
+   desc:'African padauk (Pterocarpus soyauxii) is one of the most stable tropical hardwoods. The vivid orange-red color fades to a darker reddish-brown with UV exposure.',
+   work:'Generally easy to work for an exotic. Less resinous than teak, less hard than purpleheart. Dust and particles can cause skin irritation.',
    finish:'Takes oil and film finishes well. UV-inhibiting topcoat preserves color. Natural reddish oils can bleed into light-colored adjacent materials, seal before gluing to pale woods.',
    dry:'Dries well with minimal movement. One of the more stable tropical hardwoods.',
    uses:'Furniture accents, turning, knife handles, musical instruments, inlay'},
   {id:'wenge',name:'Wenge',type:'hardwood',region:'tropical',janka:1630,food:false,
    short:'Dark espresso brown with fine black streaks, dramatic grain, difficult to work cleanly',
-   desc:'Wenge (Millettia laurentii) has one of the most distinctive grain patterns of any commercial hardwood, dark brown with near-black pores and fine lighter streaks. A prestige furniture wood, particularly in Scandinavian and contemporary design.',
+   desc:'Wenge (Millettia laurentii) has one of the most distinctive grain patterns of any commercial hardwood, dark brown with near-black pores and fine lighter streaks. A prestige furniture wood particularly in Scandinavian and contemporary design.',
    work:'Difficult. Coarse open grain splinters easily and produces sharp slivers. End grain tears out badly. Dust is a severe irritant and potential sensitizer.',
    finish:'Open pores need filling for a smooth film finish. Oil finishes produce a beautiful result but leave the grain texture.',
    dry:'Dries slowly. Prone to surface checking.',
@@ -1337,13 +1376,13 @@ const WOOD=[
   {id:'bloodwood',name:'Bloodwood',type:'hardwood',region:'tropical',janka:2900,food:false,
    short:'Intense crimson-red South American hardwood, stable color, very hard',
    desc:'Bloodwood (Brosimum rubescens) is named for its vivid blood-red color, which is more stable than purpleheart and does not fade as dramatically with UV exposure.',
-   work:'Hard and dense. Works reasonably well with sharp carbide tooling. Less resinous than some exotics. Dust can be irritating.',
+   work:'Hard and dense. Works reasonably well with sharp carbide tooling. Dust can be irritating.',
    finish:'Takes oil and film finishes well. Color is relatively stable, one of the better-behaved exotics for color retention.',
    dry:'Dries without major difficulty.',
    uses:'Accent pieces, inlay, turning, knife handles, jewelry boxes, musical instrument components'},
   {id:'bubinga',name:'Bubinga',type:'hardwood',region:'tropical',janka:2690,food:false,
    short:'African hardwood with dramatic figure, often used as a rosewood substitute',
-   desc:'Bubinga (Guibourtia spp.) is a large-pored African hardwood with warm reddish-brown color and dramatic figure including waterfall, pommele, and flame patterns in quartersawn stock. Widely used as a more available substitute for Brazilian rosewood.',
+   desc:'Bubinga (Guibourtia spp.) is a large-pored African hardwood with warm reddish-brown color and dramatic figure including waterfall, pommele, and flame patterns in quartersawn stock.',
    work:'Moderately difficult. Interlocked grain of figured stock can tear out. Sharp tools and light cuts required.',
    finish:'Takes oil and film finishes beautifully. The figure is best shown under an oil or penetrating finish.',
    dry:'Dries slowly. Some movement.',
@@ -1365,11 +1404,11 @@ const WOOD=[
   {id:'ebony',name:'Gaboon Ebony',type:'hardwood',region:'tropical',janka:3220,food:false,
    short:'The blackest commercial wood, dense, fine-grained, used for accents and musical instruments',
    desc:'Gaboon ebony (Diospyros crassiflora) is the blackest and most uniform of the commercial ebonies. Extraordinarily dense with a very fine grain that polishes to a mirror finish. Increasingly rare and expensive.',
-   work:'Very difficult. Extremely hard and brittle, prone to checking and splitting. Fine, irritating dust. Carbide tooling essential.',
+   work:'Very difficult. Extremely hard and brittle, prone to checking and splitting. Fine irritating dust. Carbide tooling essential.',
    finish:'Polishes to a natural glass-smooth finish with fine abrasives. Oils enhance the depth.',
    dry:'Must be dried extremely slowly. Prone to severe checking.',
    uses:'Piano keys, musical instrument fingerboards, knife handles, inlay, turned objects, accent pieces'},
-];
+];;
 
 const SAWMILL=[
   {id:'s4s',name:'S4S (Surfaced Four Sides)',short:'Lumber milled flat and square on all four faces',body:'S4S lumber has been run through a planer and jointer on all four surfaces. The actual dimensions are smaller than nominal, a 2x4 S4S board is actually 1-1/2" x 3-1/2".'},
@@ -1427,7 +1466,7 @@ const JOINERY=[
    approach:[
      {method:'Pocket Hole Jig',tools:'A pocket hole jig (Kreg Jig is the most common) with its stepped drill bit and depth collar. A right-angle clamp holds parts aligned during assembly.'},
    ]},
-];
+];;
 
 const CLAMPS=[
   {id:'fclamp',name:'F-Clamp (Bar Clamp)',short:'The standard shop clamp for general glue-ups and workholding',body:'The F-clamp is the most versatile clamp in the shop. One jaw slides along a bar; the other is threaded for tightening. Available from 6" to 36" or more.'},
@@ -1586,10 +1625,10 @@ const LAYOUT=[
 const JOINT_GUIDE={
   questions:[
     {id:'q1',text:'What is the primary stress on this joint?',options:[
-      {text:'Pulling apart (tension)',desc:'Parts being pulled in opposite directions, like a chair leg or drawer pull.',next:'q2'},
-      {text:'Racking / twisting sideways',desc:'Side pressure trying to distort the shape, like a door frame or cabinet side.',next:'q3'},
-      {text:'Shear (sliding)',desc:'Parts sliding past each other, like a shelf bearing weight.',next:'q4'},
-      {text:'Compression only',desc:'Parts being pushed together, like a table leg under load.',next:'q5'},
+      {text:'Pulling apart (tension)',next:'q2'},
+      {text:'Racking / twisting sideways',next:'q3'},
+      {text:'Shear (sliding)',next:'q4'},
+      {text:'Compression only',next:'q5'},
     ]},
     {id:'q2',text:'How visible is the joint?',options:[
       {text:'Hidden / structural only',next:'r-mt'},
@@ -2510,12 +2549,9 @@ function renderJointGuide(qid) {
     ? `<button class="cb" style="background:var(--cr);color:var(--ph);border:2px solid var(--ph);margin-bottom:8px" onclick="renderJointGuide('${jgHistory[jgHistory.length-1]}')">← Back</button>`
     : '';
   const optionsHtml = q.options.map(o =>
-    `<div class="li" style="cursor:pointer;border-radius:10px;border:2px solid var(--bm);margin-bottom:8px;background:white;align-items:flex-start;padding:12px 14px" onclick="jgHistory.push('${qid}');renderJointGuide('${o.next}')">
-      <div style="flex:1">
-        <div class="lil">${o.text}</div>
-        ${o.desc ? `<div class="lis" style="margin-top:3px;line-height:1.45">${o.desc}</div>` : ''}
-      </div>
-      <div class="la" style="margin-top:2px;flex-shrink:0">›</div></div>`
+    `<div class="li" style="cursor:pointer;border-radius:10px;border:2px solid var(--bm);margin-bottom:8px;background:white" onclick="jgHistory.push('${qid}');renderJointGuide('${o.next}')">
+      <div style="flex:1"><div class="lil">${o.text}</div></div>
+      <div class="la">›</div></div>`
   ).join('');
   container.innerHTML = `
     ${backBtn}
@@ -2804,6 +2840,18 @@ function safeRender(fn, label) {
   }
 }
 
+</script>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('SW registered, scope:', reg.scope))
+      .catch(err => console.warn('SW registration failed:', err));
+  });
+}
+
 // ── WORKSHOP JOURNAL ──────────────────────────────────────────────
 const JOURNAL_KEY = 'bb_journal_v1';
 const LEGACY_KEY  = 'bb_notes';
@@ -2863,24 +2911,11 @@ function journalRenderList() {
     .sort((a, b) => b.modified - a.modified)
     .map(e => {
       const preview = e.body.trim().split('\n')[0].substring(0, 60) || '(empty)';
-      return `<div class="nj-entry" style="display:flex;align-items:flex-start;gap:8px;padding:11px 14px;border-bottom:1px solid var(--bd)">
-        <div style="flex:1;cursor:pointer" data-open="${e.id}">
-          <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
-          <div class="nj-entry-preview">${preview}</div>
-        </div>
-        <button data-del="${e.id}"
-          style="flex-shrink:0;background:none;border:none;color:#aaa;
-          font-size:18px;cursor:pointer;padding:0 4px;line-height:1;
-          margin-top:2px" aria-label="Delete entry">&#10005;</button>
+      return `<div class="nj-entry" onclick="journalOpenEntry('${e.id}')">
+        <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
+        <div class="nj-entry-preview">${preview}</div>
       </div>`;
     }).join('');
-  // Use event delegation, one listener on the list container
-  list.onclick = function(ev) {
-    const openEl = ev.target.closest('[data-open]');
-    const delEl  = ev.target.closest('[data-del]');
-    if (delEl)  journalDeleteEntry(delEl.dataset.del);
-    else if (openEl) journalOpenEntry(openEl.dataset.open);
-  };
 }
 
 function journalOpenEntry(id) {
@@ -2917,20 +2952,12 @@ function journalSaveEntry() {
   if (msg) { msg.style.opacity = '1'; setTimeout(() => msg.style.opacity = '0', 1800); }
 }
 
-function journalDeleteEntry(id) {
-  const targetId = id || activeEntryId;
-  if (!targetId) return;
-  const entry = journalEntries.find(e => e.id === targetId);
-  const preview = entry ? (entry.body.trim().split('\n')[0].substring(0, 40) || 'empty entry') : 'this entry';
-  if (!confirm('Delete "' + preview + '"?\n\nThis cannot be undone.')) return;
-  journalEntries = journalEntries.filter(e => e.id !== targetId);
+function journalDeleteEntry() {
+  if (!activeEntryId) return;
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
+  journalEntries = journalEntries.filter(e => e.id !== activeEntryId);
   journalSave();
-  // If we deleted the active entry, go back to list; otherwise just re-render list
-  if (targetId === activeEntryId) {
-    journalBackToList();
-  } else {
-    journalRenderList();
-  }
+  journalBackToList();
 }
 
 function journalBackToList() {
@@ -2975,6 +3002,16 @@ function journalExportFallback(text) {
 function journalInit() {
   journalLoad();
   journalRenderList();
+  const newBtn  = document.getElementById('nj-new');
+  const saveBtn = document.getElementById('nj-save');
+  const delBtn  = document.getElementById('nj-delete');
+  const backBtn = document.getElementById('nj-back');
+  const expBtn  = document.getElementById('nj-export');
+  if (newBtn)  newBtn.addEventListener('click',  journalNewEntry);
+  if (saveBtn) saveBtn.addEventListener('click',  journalSaveEntry);
+  if (delBtn)  delBtn.addEventListener('click',   journalDeleteEntry);
+  if (backBtn) backBtn.addEventListener('click',  journalBackToList);
+  if (expBtn)  expBtn.addEventListener('click',   journalExport);
   // Auto-save on body change (debounced)
   const body = document.getElementById('nj-body');
   if (body) {
@@ -2986,18 +3023,6 @@ function journalInit() {
   }
 }
 
-
-</script>
-
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('SW registered, scope:', reg.scope))
-      .catch(err => console.warn('SW registration failed:', err));
-  });
-}
 </script>
 
 </body>
