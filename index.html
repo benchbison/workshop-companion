@@ -299,20 +299,19 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
       <textarea id="nj-body" placeholder="Measurements, observations, ideas..." style="width:100%;height:100%;min-height:180px;background:transparent;border:none;font-family:var(--ss);font-size:14px;line-height:1.7;color:var(--ink);resize:none;outline:none;padding:8px 0"></textarea>
     </div>
     <div style="padding:8px 12px;display:flex;gap:8px;flex-shrink:0;border-top:1px solid var(--bd)">
-      <button id="nj-save" style="flex:1;background:var(--ph);color:white;border:none;border-radius:8px;padding:9px;font-family:var(--ss);font-size:13px;font-weight:600;cursor:pointer">Save</button>
-      <button id="nj-delete" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">Delete</button>
-      <button id="nj-back" style="background:transparent;color:var(--il);border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">← Back</button>
+      <button id="nj-save" onclick="journalSaveEntry()" style="flex:1;background:var(--ph);color:white;border:none;border-radius:8px;padding:9px;font-family:var(--ss);font-size:13px;font-weight:600;cursor:pointer">Save</button>
+      <button id="nj-back" onclick="journalBackToList()" style="background:transparent;color:var(--il);border:1.5px solid var(--bd);border-radius:8px;padding:9px 14px;font-family:var(--ss);font-size:13px;cursor:pointer">← Back</button>
     </div>
     <p id="nj-saved-msg" style="text-align:center;font-size:11px;color:var(--pm);padding:4px 0 6px;opacity:0;transition:opacity 0.3s">Saved.</p>
   </div>
   <!-- Entry list (shown when browsing) -->
   <div id="nj-list-view" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
     <div style="padding:10px 12px 8px;flex-shrink:0">
-      <button id="nj-new" style="width:100%;background:var(--ph);color:white;border:none;border-radius:8px;padding:10px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer">+ New Entry</button>
+      <button id="nj-new" onclick="journalNewEntry()" style="width:100%;background:var(--ph);color:white;border:none;border-radius:8px;padding:10px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer">+ New Entry</button>
     </div>
     <div id="nj-list" style="flex:1;overflow-y:auto;padding:0 0 8px"></div>
     <div style="padding:8px 12px;border-top:1px solid var(--bd);flex-shrink:0">
-      <button id="nj-export" style="width:100%;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">Export All Notes</button>
+      <button id="nj-export" onclick="journalExport()" style="width:100%;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">Export All Notes</button>
     </div>
   </div>
 </aside>
@@ -2627,11 +2626,24 @@ function journalRenderList() {
     .sort((a, b) => b.modified - a.modified)
     .map(e => {
       const preview = e.body.trim().split('\n')[0].substring(0, 60) || '(empty)';
-      return `<div class="nj-entry" onclick="journalOpenEntry('${e.id}')">
-        <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
-        <div class="nj-entry-preview">${preview}</div>
+      return `<div class="nj-entry" style="display:flex;align-items:flex-start;gap:8px;padding:11px 14px;border-bottom:1px solid var(--bd)">
+        <div style="flex:1;cursor:pointer" data-open="${e.id}">
+          <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
+          <div class="nj-entry-preview">${preview}</div>
+        </div>
+        <button data-del="${e.id}"
+          style="flex-shrink:0;background:none;border:none;color:#aaa;
+          font-size:18px;cursor:pointer;padding:0 4px;line-height:1;
+          margin-top:2px" aria-label="Delete entry">&#10005;</button>
       </div>`;
     }).join('');
+  // Use event delegation -- one listener on the list container
+  list.onclick = function(ev) {
+    const openEl = ev.target.closest('[data-open]');
+    const delEl  = ev.target.closest('[data-del]');
+    if (delEl)  journalDeleteEntry(delEl.dataset.del);
+    else if (openEl) journalOpenEntry(openEl.dataset.open);
+  };
 }
 
 function journalOpenEntry(id) {
@@ -2668,12 +2680,20 @@ function journalSaveEntry() {
   if (msg) { msg.style.opacity = '1'; setTimeout(() => msg.style.opacity = '0', 1800); }
 }
 
-function journalDeleteEntry() {
-  if (!activeEntryId) return;
-  if (!confirm('Delete this entry? This cannot be undone.')) return;
-  journalEntries = journalEntries.filter(e => e.id !== activeEntryId);
+function journalDeleteEntry(id) {
+  const targetId = id || activeEntryId;
+  if (!targetId) return;
+  const entry = journalEntries.find(e => e.id === targetId);
+  const preview = entry ? (entry.body.trim().split('\n')[0].substring(0, 40) || 'empty entry') : 'this entry';
+  if (!confirm('Delete "' + preview + '"?\n\nThis cannot be undone.')) return;
+  journalEntries = journalEntries.filter(e => e.id !== targetId);
   journalSave();
-  journalBackToList();
+  // If we deleted the active entry, go back to list; otherwise just re-render list
+  if (targetId === activeEntryId) {
+    journalBackToList();
+  } else {
+    journalRenderList();
+  }
 }
 
 function journalBackToList() {
@@ -2718,16 +2738,6 @@ function journalExportFallback(text) {
 function journalInit() {
   journalLoad();
   journalRenderList();
-  const newBtn  = document.getElementById('nj-new');
-  const saveBtn = document.getElementById('nj-save');
-  const delBtn  = document.getElementById('nj-delete');
-  const backBtn = document.getElementById('nj-back');
-  const expBtn  = document.getElementById('nj-export');
-  if (newBtn)  newBtn.addEventListener('click',  journalNewEntry);
-  if (saveBtn) saveBtn.addEventListener('click',  journalSaveEntry);
-  if (delBtn)  delBtn.addEventListener('click',   journalDeleteEntry);
-  if (backBtn) backBtn.addEventListener('click',  journalBackToList);
-  if (expBtn)  expBtn.addEventListener('click',   journalExport);
   // Auto-save on body change (debounced)
   const body = document.getElementById('nj-body');
   if (body) {
