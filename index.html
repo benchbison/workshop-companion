@@ -753,6 +753,17 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
         <option value="beech">European Beech</option>
         <option value="sycamore">American Sycamore</option>
         <option value="butternut">Butternut</option>
+      <option value="european-oak">European Oak</option>
+      <option value="osage-orange">Osage Orange</option>
+      <option value="purpleheart">Purpleheart</option>
+      <option value="lignum-vitae">Lignum Vitae</option>
+      <option value="padauk">African Padauk</option>
+      <option value="wenge">Wenge</option>
+      <option value="bloodwood">Bloodwood</option>
+      <option value="bubinga">Bubinga</option>
+      <option value="zebrawood">Zebrawood</option>
+      <option value="rosewood-indian">Indian Rosewood</option>
+      <option value="ebony">Gaboon Ebony</option>
       </select>
     </div>
     <div class="cr2">
@@ -1419,8 +1430,7 @@ const SAWMILL=[
   {id:'riftsawn',name:'Riftsawn',short:'Growth rings at 30 to 60 degrees to the face',body:'Riftsawn stock shows a straight, consistent grain pattern on the face, making it prized for furniture legs and linear design elements.'},
   {id:'nominal',name:'Nominal vs Actual Dimensions',short:'The stated size vs the real measurement of a board',body:'Nominal dimensions are traditional names for lumber sizes. Actual dimensions are smaller after drying and surfacing. A 1x4 is actually 3/4" x 3-1/2". For hardwoods, thickness is expressed in quarters: 4/4 is nominally 1", 8/4 is 2".'},
   {id:'bdft',name:'Board Foot',short:'Unit of lumber volume: 1" thick x 12" wide x 12" long',body:'One board foot equals 144 cubic inches of lumber. The formula is: Thickness (inches) x Width (inches) x Length (feet) divided by 12.'},
-  {id:'heartwood',name:'Heartwood vs Sapwood',short:'The central dark wood vs the lighter outer wood of the tree',body:'Heartwood is the older, darker central portion of a log. It is denser, more decay-resistant, and more valuable for most applications. Sapwood is the lighter outer wood.'},
-];
+  ];
 
 const JOINERY=[
   {id:'mt',name:'Mortise and Tenon',type:'both',short:'The fundamental structural joint of furniture making',str:'Excellent in all directions when properly fitted and glued',use:'Chair legs, table aprons, door frames, cabinet face frames',
@@ -1746,6 +1756,17 @@ const MOVEMENT_DATA = {
   'sycamore':       [0.289, 0.152],
   'butternut':      [0.216, 0.140],
   'soft-maple':     [0.297, 0.157],
+  'european-oak':    [0.369, 0.179],
+  'osage-orange':    [0.313, 0.166],
+  'purpleheart':     [0.307, 0.179],
+  'lignum-vitae':    [0.316, 0.237],
+  'padauk':          [0.310, 0.163],
+  'wenge':           [0.280, 0.180],
+  'bloodwood':       [0.290, 0.170],
+  'bubinga':         [0.390, 0.230],
+  'zebrawood':       [0.310, 0.180],
+  'rosewood-indian': [0.270, 0.175],
+  'ebony':           [0.275, 0.175]
 };
 
 // ── FINISHING SCHEDULES ────────────────────────────────────────────
