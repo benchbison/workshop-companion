@@ -986,20 +986,20 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
 const LOGO = "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";
 
 const T=[
-  {id:'kerf',name:'Kerf',cat:'cutting',short:'Width of material removed by a saw blade',def:'The kerf is the slot left behind by a saw blade. Its width is determined by the set of the teeth. A wider kerf removes more material and can reduce binding.',rel:['set','fleam','rip','crosscut'],tags:[{l:'Sawing',f:'sawing'},{l:'Measurement',f:'measurement'}]},
-  {id:'set',name:'Set (Saw)',cat:'cutting',short:'Outward bend of saw teeth to create kerf clearance',def:'The set refers to the angle at which alternate teeth are bent away from the blade body, creating a kerf wider than the blade plate itself, preventing binding.',rel:['kerf','fleam'],tags:[{l:'Sawing',f:'sawing'}]},
-  {id:'fleam',name:'Fleam',cat:'cutting',short:'Cross-filing angle of saw teeth',def:'Fleam is the angle at which saw teeth are filed across their face. A higher fleam angle creates a more aggressive slicing action used in crosscut saws.',rel:['kerf','set','crosscut'],tags:[{l:'Sawing',f:'sawing'}]},
-  {id:'rip',name:'Rip Cut',cat:'cutting',short:'Cutting along the length of the grain',def:'A rip cut runs parallel to the wood grain. Rip saws have teeth filed with little or no fleam, designed to chisel through long grain fibers efficiently.',rel:['crosscut','kerf','grain'],tags:[{l:'Sawing',f:'sawing'},{l:'Milling',f:'milling'}]},
-  {id:'crosscut',name:'Crosscut',cat:'cutting',short:'Cutting across the grain',def:'A crosscut runs perpendicular to the wood grain to shorten a board. Crosscut saw teeth are filed with fleam to slice cleanly across fibers rather than tear them.',rel:['rip','kerf','fleam'],tags:[{l:'Sawing',f:'sawing'}]},
+  {id:'kerf',name:'Kerf',cat:'cutting',short:'Width of material removed by a saw blade',def:'The kerf is the slot left behind by a saw blade. Its width is determined by the set of the teeth. A wider kerf removes more material and can reduce binding.',rel:['set','fleam','rip','crosscut'],tags:[{l:'Cutting',f:'cutting'},{l:'Measuring',f:'measuring'}]},
+  {id:'set',name:'Set (Saw)',cat:'cutting',short:'Outward bend of saw teeth to create kerf clearance',def:'The set refers to the angle at which alternate teeth are bent away from the blade body, creating a kerf wider than the blade plate itself, preventing binding.',rel:['kerf','fleam'],tags:[{l:'Cutting',f:'cutting'}]},
+  {id:'fleam',name:'Fleam',cat:'cutting',short:'Cross-filing angle of saw teeth',def:'Fleam is the angle at which saw teeth are filed across their face. A higher fleam angle creates a more aggressive slicing action used in crosscut saws.',rel:['kerf','set','crosscut'],tags:[{l:'Cutting',f:'cutting'}]},
+  {id:'rip',name:'Rip Cut',cat:'cutting',short:'Cutting along the length of the grain',def:'A rip cut runs parallel to the wood grain. Rip saws have teeth filed with little or no fleam, designed to chisel through long grain fibers efficiently.',rel:['crosscut','kerf','grain'],tags:[{l:'Cutting',f:'cutting'},{l:'Milling',f:'milling'}]},
+  {id:'crosscut',name:'Crosscut',cat:'cutting',short:'Cutting across the grain',def:'A crosscut runs perpendicular to the wood grain to shorten a board. Crosscut saw teeth are filed with fleam to slice cleanly across fibers rather than tear them.',rel:['rip','kerf','fleam'],tags:[{l:'Cutting',f:'cutting'}]},
   {id:'grain',name:'Grain',cat:'wood',short:'Direction and character of wood fiber growth',def:'Grain refers to the direction, size, and arrangement of wood fibers as they grew in the tree. Working with the grain produces clean results; working against it causes tearout.',rel:['tearout','rip','crosscut'],tags:[{l:'Milling',f:'milling'}]},
   {id:'tearout',name:'Tearout',cat:'milling',short:'Fibers torn rather than cleanly cut, leaving a rough surface',def:'Tearout occurs when a cutting edge lifts and breaks wood fibers rather than slicing through them cleanly. Prevention: plane with the grain, close the plane mouth, set a tight chip breaker, take lighter cuts.',rel:['grain'],tags:[{l:'Milling',f:'milling'},{l:'Finishing',f:'finishing'}]},
-  {id:'mortise',name:'Mortise',cat:'joinery',short:'Rectangular recess cut to receive a tenon',def:'A mortise is a rectangular cavity cut into a piece of wood, designed to accept a corresponding tenon. Mortise walls should be square, clean, and sized to the tenon with a snug but not forced fit.',rel:['tenon'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'tenon',name:'Tenon',cat:'joinery',short:'Projecting tongue cut to fit into a mortise',def:'A tenon is a projection on the end of a piece of wood, shaped to fit into a mortise. Proper tenon fit is snug, it should require hand pressure to seat, not mallet blows.',rel:['mortise'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'dovetail',name:'Dovetail',cat:'joinery',short:'Interlocking joint with trapezoidal pins and tails',def:'The dovetail joint uses trapezoidal interlocking parts, tails on one board and pins on the other, that lock mechanically when assembled.',rel:['mortise','tenon'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'winding',name:'Winding (Sticks)',cat:'milling',short:'Twist across the face of a board',def:'Winding refers to twist in a board where one corner is higher or lower than the others. Winding sticks placed across both ends and sighted along reveal any twist clearly.',rel:[],tags:[{l:'Measurement',f:'measurement'}]},
-  {id:'refface',name:'Reference Face',cat:'milling',short:'The first flat, true face established on a board',def:'The face side is the first surface you flatten on a rough board, the reference datum from which all other dimensions are measured.',rel:['winding'],tags:[{l:'Measurement',f:'measurement'},{l:'Milling',f:'milling'}]},
-  {id:'rebate',name:'Rebate / Rabbet',cat:'joinery',short:'Rectangular step cut along the edge or end of a board',def:'A rebate is an L-shaped step cut along the edge or end of a board. Used in drawers, cabinet backs, frame-and-panel work, and glazing.',rel:['dado'],tags:[{l:'Joinery',f:'joinery-t'}]},
-  {id:'dado',name:'Dado / Housing',cat:'joinery',short:'Rectangular channel cut across the grain',def:'A dado is a rectangular trench cut across the grain of a board, typically to accept a shelf or panel.',rel:['rebate'],tags:[{l:'Joinery',f:'joinery-t'}]},
+  {id:'mortise',name:'Mortise',cat:'joinery',short:'Rectangular recess cut to receive a tenon',def:'A mortise is a rectangular cavity cut into a piece of wood, designed to accept a corresponding tenon. Mortise walls should be square, clean, and sized to the tenon with a snug but not forced fit.',rel:['tenon'],tags:[{l:'Joinery',f:'joinery'}]},
+  {id:'tenon',name:'Tenon',cat:'joinery',short:'Projecting tongue cut to fit into a mortise',def:'A tenon is a projection on the end of a piece of wood, shaped to fit into a mortise. Proper tenon fit is snug, it should require hand pressure to seat, not mallet blows.',rel:['mortise'],tags:[{l:'Joinery',f:'joinery'}]},
+  {id:'dovetail',name:'Dovetail',cat:'joinery',short:'Interlocking joint with trapezoidal pins and tails',def:'The dovetail joint uses trapezoidal interlocking parts, tails on one board and pins on the other, that lock mechanically when assembled.',rel:['mortise','tenon'],tags:[{l:'Joinery',f:'joinery'}]},
+  {id:'winding',name:'Winding (Sticks)',cat:'milling',short:'Twist across the face of a board',def:'Winding refers to twist in a board where one corner is higher or lower than the others. Winding sticks placed across both ends and sighted along reveal any twist clearly.',rel:[],tags:[{l:'Measuring',f:'measuring'}]},
+  {id:'refface',name:'Reference Face',cat:'milling',short:'The first flat, true face established on a board',def:'The face side is the first surface you flatten on a rough board, the reference datum from which all other dimensions are measured.',rel:['winding'],tags:[{l:'Measuring',f:'measuring'},{l:'Milling',f:'milling'}]},
+  {id:'rebate',name:'Rebate / Rabbet',cat:'joinery',short:'Rectangular step cut along the edge or end of a board',def:'A rebate is an L-shaped step cut along the edge or end of a board. Used in drawers, cabinet backs, frame-and-panel work, and glazing.',rel:['dado'],tags:[{l:'Joinery',f:'joinery'}]},
+  {id:'dado',name:'Dado / Housing',cat:'joinery',short:'Rectangular channel cut across the grain',def:'A dado is a rectangular trench cut across the grain of a board, typically to accept a shelf or panel.',rel:['rebate'],tags:[{l:'Joinery',f:'joinery'}]},
   {id:'burnishing',name:'Burnishing',cat:'finishing',short:'Compressing wood fibers or turning a burr on a scraper',def:'Burnishing refers to two techniques: (1) smoothing wood fibers before finishing, and (2) forming the cutting burr on a card scraper by drawing a burnisher across the edge at a slight angle after sharpening.',rel:[],tags:[{l:'Finishing',f:'finishing'}]},
 ,
   {id:'pocket-hole',name:'Pocket Hole',cat:'joinery',
@@ -2861,19 +2861,7 @@ function safeRender(fn, label) {
   }
 }
 
-</script>
-
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('SW registered, scope:', reg.scope))
-      .catch(err => console.warn('SW registration failed:', err));
-  });
-}
-
-// ── WORKSHOP JOURNAL ──────────────────────────────────────────────
+// ── WORKSHOP JOURNAL ─────────────────────────────────────────────
 const JOURNAL_KEY = 'bb_journal_v1';
 const LEGACY_KEY  = 'bb_notes';
 let journalEntries = [];
@@ -2883,21 +2871,13 @@ function journalLoad() {
   try {
     const raw = localStorage.getItem(JOURNAL_KEY);
     journalEntries = raw ? JSON.parse(raw) : [];
-  } catch(e) {
-    journalEntries = [];
-  }
-  // Migrate legacy single-textarea notes to a journal entry
+  } catch(e) { journalEntries = []; }
   try {
     const legacy = localStorage.getItem(LEGACY_KEY);
     if (legacy && legacy.trim()) {
       const exists = journalEntries.find(e => e.id === 'legacy');
       if (!exists) {
-        journalEntries.unshift({
-          id: 'legacy',
-          created: Date.now() - 1000,
-          modified: Date.now() - 1000,
-          body: legacy.trim()
-        });
+        journalEntries.unshift({id:'legacy',created:Date.now()-1000,modified:Date.now()-1000,body:legacy.trim()});
         journalSave();
         localStorage.removeItem(LEGACY_KEY);
       }
@@ -2906,17 +2886,14 @@ function journalLoad() {
 }
 
 function journalSave() {
-  try {
-    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journalEntries));
-  } catch(e) {
-    console.warn('Journal save failed:', e.message);
-  }
+  try { localStorage.setItem(JOURNAL_KEY, JSON.stringify(journalEntries)); }
+  catch(e) { console.warn('Journal save failed:', e.message); }
 }
 
 function journalFormatDate(ts) {
   const d = new Date(ts);
-  const date = d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-  const time = d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+  const date = d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+  const time = d.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit'});
   return date + ' · ' + time;
 }
 
@@ -2928,15 +2905,23 @@ function journalRenderList() {
     return;
   }
   list.innerHTML = journalEntries
-    .slice()
-    .sort((a, b) => b.modified - a.modified)
+    .slice().sort((a,b) => b.modified - a.modified)
     .map(e => {
-      const preview = e.body.trim().split('\n')[0].substring(0, 60) || '(empty)';
-      return `<div class="nj-entry" onclick="journalOpenEntry('${e.id}')">
-        <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
-        <div class="nj-entry-preview">${preview}</div>
+      const preview = e.body.trim().split('\n')[0].substring(0,60) || '(empty)';
+      return `<div class="nj-entry" style="display:flex;align-items:flex-start;gap:8px;padding:11px 14px;border-bottom:1px solid var(--bd)">
+        <div style="flex:1;cursor:pointer" data-open="${e.id}">
+          <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
+          <div class="nj-entry-preview">${preview}</div>
+        </div>
+        <button data-del="${e.id}" style="flex-shrink:0;background:none;border:none;color:#aaa;font-size:18px;cursor:pointer;padding:0 4px;line-height:1;margin-top:2px" aria-label="Delete entry">&#10005;</button>
       </div>`;
     }).join('');
+  list.onclick = function(ev) {
+    const openEl = ev.target.closest('[data-open]');
+    const delEl  = ev.target.closest('[data-del]');
+    if (delEl)  journalDeleteEntry(delEl.dataset.del);
+    else if (openEl) journalOpenEntry(openEl.dataset.open);
+  };
 }
 
 function journalOpenEntry(id) {
@@ -2956,8 +2941,7 @@ function journalOpenEntry(id) {
 function journalNewEntry() {
   const id = 'e' + Date.now();
   const now = Date.now();
-  const entry = { id, created: now, modified: now, body: '' };
-  journalEntries.unshift(entry);
+  journalEntries.unshift({id, created:now, modified:now, body:''});
   journalSave();
   journalOpenEntry(id);
 }
@@ -2973,12 +2957,16 @@ function journalSaveEntry() {
   if (msg) { msg.style.opacity = '1'; setTimeout(() => msg.style.opacity = '0', 1800); }
 }
 
-function journalDeleteEntry() {
-  if (!activeEntryId) return;
-  if (!confirm('Delete this entry? This cannot be undone.')) return;
-  journalEntries = journalEntries.filter(e => e.id !== activeEntryId);
+function journalDeleteEntry(id) {
+  const targetId = id || activeEntryId;
+  if (!targetId) return;
+  const entry = journalEntries.find(e => e.id === targetId);
+  const preview = entry ? (entry.body.trim().split('\n')[0].substring(0,40) || 'empty entry') : 'this entry';
+  if (!confirm('Delete "' + preview + '"?\n\nThis cannot be undone.')) return;
+  journalEntries = journalEntries.filter(e => e.id !== targetId);
   journalSave();
-  journalBackToList();
+  if (targetId === activeEntryId) journalBackToList();
+  else journalRenderList();
 }
 
 function journalBackToList() {
@@ -2989,28 +2977,20 @@ function journalBackToList() {
 }
 
 function journalExport() {
-  if (!journalEntries.length) {
-    alert('No journal entries to export.');
-    return;
-  }
-  const sorted = journalEntries.slice().sort((a, b) => b.modified - a.modified);
-  const text = sorted.map(e =>
-    '── ' + journalFormatDate(e.created) + ' ──\n' + e.body.trim()
-  ).join('\n\n');
+  if (!journalEntries.length) { alert('No journal entries to export.'); return; }
+  const sorted = journalEntries.slice().sort((a,b) => b.modified - a.modified);
+  const text = sorted.map(e => '-- ' + journalFormatDate(e.created) + ' --\n' + e.body.trim()).join('\n\n');
   try {
     navigator.clipboard.writeText(text).then(() => {
       alert('All notes copied to clipboard. Paste into any app to save.');
     }).catch(() => journalExportFallback(text));
-  } catch(e) {
-    journalExportFallback(text);
-  }
+  } catch(e) { journalExportFallback(text); }
 }
 
 function journalExportFallback(text) {
-  // Fallback: show in a textarea for manual copy
   const ta = document.createElement('textarea');
   ta.value = text;
-  ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80vw;height:60vh;z-index:99999;padding:12px;font-size:13px;font-family:monospace;border:2px solid #1B4D3E;border-radius:8px';
+  ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80vw;height:60vh;z-index:99999;padding:12px;font-size:13px;border:2px solid #1B4D3E;border-radius:8px';
   document.body.appendChild(ta);
   ta.select();
   const close = document.createElement('button');
@@ -3023,17 +3003,6 @@ function journalExportFallback(text) {
 function journalInit() {
   journalLoad();
   journalRenderList();
-  const newBtn  = document.getElementById('nj-new');
-  const saveBtn = document.getElementById('nj-save');
-  const delBtn  = document.getElementById('nj-delete');
-  const backBtn = document.getElementById('nj-back');
-  const expBtn  = document.getElementById('nj-export');
-  if (newBtn)  newBtn.addEventListener('click',  journalNewEntry);
-  if (saveBtn) saveBtn.addEventListener('click',  journalSaveEntry);
-  if (delBtn)  delBtn.addEventListener('click',   journalDeleteEntry);
-  if (backBtn) backBtn.addEventListener('click',  journalBackToList);
-  if (expBtn)  expBtn.addEventListener('click',   journalExport);
-  // Auto-save on body change (debounced)
   const body = document.getElementById('nj-body');
   if (body) {
     let saveTimer;
@@ -3043,7 +3012,19 @@ function journalInit() {
     });
   }
 }
+// Inline-safe disclaimer accept, called directly from onclick</script>
 
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('SW registered, scope:', reg.scope))
+      .catch(err => console.warn('SW registration failed:', err));
+  });
+}
+
+// ── WORKSHOP JOURNAL ──────────────────────────────────────────────
 </script>
 
 </body>
