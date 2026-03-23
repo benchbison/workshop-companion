@@ -991,7 +991,15 @@ const T=[
   {id:'rebate',name:'Rebate / Rabbet',cat:'joinery-t',short:'Rectangular step cut along the edge or end of a board',def:'A rebate is an L-shaped step cut along the edge or end of a board. Used in drawers, cabinet backs, frame-and-panel work, and glazing.',rel:['dado'],tags:[{l:'Joinery',f:'joinery-t'}]},
   {id:'dado',name:'Dado / Housing',cat:'joinery-t',short:'Rectangular channel cut across the grain',def:'A dado is a rectangular trench cut across the grain of a board, typically to accept a shelf or panel.',rel:['rebate'],tags:[{l:'Joinery',f:'joinery-t'}]},
   {id:'burnishing',name:'Burnishing',cat:'finishing',short:'Compressing wood fibers or turning a burr on a scraper',def:'Burnishing refers to two techniques: (1) smoothing wood fibers before finishing, and (2) forming the cutting burr on a card scraper by drawing a burnisher across the edge at a slight angle after sharpening.',rel:[],tags:[{l:'Finishing',f:'finishing'}]},
-];
+,
+  {id:'pocket-hole',name:'Pocket Hole',cat:'joinery-t',
+   short:'An angled counterbored hole drilled into a workpiece to receive a pocket screw',
+   def:'A pocket hole is drilled at an angle (typically 15 degrees) using a pocket hole jig. The stepped drill bit creates a counterbore (the pocket) and a pilot hole in one pass. A self-tapping screw is driven through the pocket and into the mating piece. The angled geometry pulls the joint tight and resists pulling apart. Pocket holes are always hidden on the back or underside of a piece.',
+   rel:['tenon','dado'],tags:[{l:'Pocket Hole Jig',f:'pocket-hole-jig'},{l:'Pocket Screw Joint',f:'pocket'}]},
+  {id:'shear',name:'Shear',cat:'joinery-t',
+   short:'A force that causes two parts to slide past each other along a plane',
+   def:'Shear is a mechanical force in which two connected parts are pushed or pulled in opposite but parallel directions along the same plane, causing them to slide against each other. In woodworking, a shelf bearing a load experiences shear at the joint connecting it to the case side. Dados and housing joints resist shear well because the wood itself carries the load, not just the fastener or glue line.',
+   rel:['dado','mortise'],tags:[{l:'Dado / Housing',f:'dado-j'},{l:'Pocket Hole Jig',f:'pocket-hole-jig'}]}];
 
 const TOOLS=[
   {id:'bench-plane',name:'Bench Plane',cat:'planes',short:'Versatile plane for flattening, smoothing, and dimensioning',use:'Flattening rough boards, reducing thickness, smoothing surfaces, shooting edges',ease:'Moderate, requires proper setup and a sharp iron',terms:[{n:'Chip breaker',id:null},{n:'Mouth',id:null},{n:'Sole',id:null},{n:'Iron',id:null}],types:['#4 Smoother (most versatile)','#5 Jack (rough stock removal)','#7 Jointer (edge jointing)'],tech:'Set the iron for a light cut. Work with the grain. Drive the plane with your body weight, not your arms.'},
@@ -1006,7 +1014,13 @@ const TOOLS=[
   {id:'chisel',name:'Bench Chisel',cat:'chisels',short:'Steel blade for paring, chopping, and joinery work',use:'Mortising, dovetail waste removal, paring joints to fit',ease:'Easy to use, critical to keep sharp',terms:[{n:'Mortise',id:'mortise'},{n:'Dovetail',id:'dovetail'}],types:['Bench chisel (general purpose)','Paring chisel (long, light cuts)','Mortise chisel (thick, heavy chopping)'],tech:'For chopping: register the flat back against your layout line, strike with a mallet. For paring: use hand pressure only.'},
   {id:'brace',name:'Brace and Bit',cat:'boring',short:'Crank-style hand drill for boring large holes with auger bits',use:'Boring deep holes, drawbore pins, mortise clearing',ease:'Moderate',terms:[{n:'Mortise',id:'mortise'}],types:['Jennings auger bit (clean through-holes)','Irwin pattern auger (faster)','Center bit (shallow recesses)','Spoon bit (green wood, chairmaking)','Forstner with brace adapter (flat-bottomed)','Expansion bit (adjustable diameter)'],tech:'Mark your center clearly. Keep the brace aligned vertically. Apply steady downward pressure through your chest.'},
   {id:'holdfast',name:'Holdfast',cat:'workholding',short:'Pivoting metal clamp driven into bench dog hole to secure work',use:'Holding work flat on bench surface',ease:'Easy once bench is set up',terms:[{n:'Mortise',id:'mortise'}],types:['Traditional iron holdfast','Modern Gramercy holdfast (most recommended)'],tech:'Strike the collar sharply with a mallet to lock. To release, strike the back of the column.'},
-];
+,
+  {id:'pocket-hole-jig',name:'Pocket Hole Jig',cat:'power',
+   short:'Jig for drilling angled pocket holes for pocket screw joinery',
+   use:'Cabinet construction, face frames, furniture assembly',
+   ease:'Easy',
+   body:'A pocket hole jig guides a stepped drill bit at a precise angle into a workpiece, creating an angled pocket and pilot hole in one operation. The Kreg Jig is the most common brand. The bit drills a counterbored pocket at roughly 15 degrees, angled toward the face of the mating piece. A coarse-threaded self-tapping screw pulls the joint tight without glue, though glue can be added for strength. Pocket screw joinery is fast and requires no clamping time, making it popular for cabinet boxes and face frames. It is a mechanical joint, not a traditional woodworking joint. Strength comes from the screw, not wood-to-wood geometry.',
+   terms:[{l:'Pocket Hole',f:'pocket-hole'},{l:'Shear',f:'shear'}]}];
 
 const WOOD=[
   {id:'white-oak',name:'White Oak',type:'hardwood',region:'na',janka:1360,food:true,short:'Durable, tight-grained, excellent for outdoor and furniture work',desc:'White oak is a premier hardwood for furniture, cooperage, and outdoor applications. Its pores are filled with tyloses, making it highly water-resistant.',work:'Works well with hand tools and power tools. Prone to surface checking if dried too rapidly.',finish:'Takes oil, wax, and film finishes well. Tannins react with iron, avoid iron clamps on wet glue joints.',dry:'Air dry 1 year per inch of thickness minimum.',uses:'Outdoor furniture, flooring, barrels, boat building, cabinetry'},
@@ -1194,13 +1208,49 @@ const SAWMILL=[
 ];
 
 const JOINERY=[
-  {id:'mt',name:'Mortise and Tenon',type:'both',short:'The fundamental structural joint of furniture making',str:'Excellent in all directions when properly fitted and glued',use:'Chair legs, table aprons, door frames, cabinet face frames',body:'The mortise and tenon is arguably the oldest and most important joint in woodworking. The joint can be reinforced with drawboring.',tags:['Hand Tool','Power Tool']},
-  {id:'dtail',name:'Dovetail',type:'hand',short:'Interlocking trapezoidal joint that resists pulling apart',str:'Exceptional resistance to racking and tension',use:'Drawer boxes, casework corners, box construction',body:'The dovetail is the hallmark of fine hand joinery. Trapezoidal tails on one board interlock with matching pins on the other. Through dovetails show the joint on both faces. Half-blind dovetails hide the joint from one face.',tags:['Hand Tool']},
-  {id:'box',name:'Box Joint (Finger Joint)',type:'both',short:'Interlocking rectangular fingers',str:'Strong in tension when glued',use:'Drawer boxes, small boxes, decorative joinery',body:'The box joint uses evenly spaced rectangular fingers that interlock at right angles.',tags:['Hand Tool','Power Tool']},
-  {id:'hlap',name:'Half-Lap',type:'both',short:'Two pieces halved in thickness and overlapped',str:'Moderate, relies on glue and fasteners',use:'Frame construction, grids, face frames',body:'A half-lap joint removes half the thickness from each piece at the joint location, allowing them to overlap flush.',tags:['Hand Tool','Power Tool']},
-  {id:'dado-j',name:'Dado / Housing',type:'both',short:'A channel cut across the grain to receive a shelf or panel',str:'Good in shear; weak in tension without mechanical fasteners',use:'Shelf joinery, cabinet construction, bookcase backs',body:'A dado cut across the grain accepts a shelf or divider at a fixed location.',tags:['Hand Tool','Power Tool']},
-  {id:'drawbore',name:'Drawbore',type:'hand',short:'Pulls a mortise-and-tenon joint tight without clamps',str:'Reinforces and locks a mortise and tenon permanently',use:'Chair joinery, timber framing',body:'A hole is drilled through the mortise wall and into the tenon, but the hole in the tenon is drilled slightly offset. A tapered wooden peg driven through draws the joint tight.',tags:['Hand Tool']},
-  {id:'pocket',name:'Pocket Screw Joint',type:'power',short:'Angled screw joint using a jig-drilled pocket hole',str:'Moderate, adequate for face frames and cabinet boxes',use:'Face frames, cabinet carcass construction',body:'The pocket screw joint uses a jig to drill an angled pocket hole into one piece, then drives a coarse-threaded screw into the mating piece.',tags:['Power Tool']},
+  {id:'mt',name:'Mortise and Tenon',type:'both',short:'The fundamental structural joint of furniture making',str:'Excellent in all directions when properly fitted and glued',use:'Chair legs, table aprons, door frames, cabinet face frames',
+   body:'The mortise and tenon is arguably the oldest and most important joint in woodworking. The joint can be reinforced with drawboring.',
+   approach:[
+     {method:'Hand Tool',tools:'Chisels and mallet for the mortise, tenon saw and shoulder plane for the tenon. Marking gauge to set the layout.'},
+     {method:'Power Tool',tools:'Mortiser or drill press with chisel attachment for the mortise. Table saw or router table for the tenon cheeks.'},
+   ]},
+  {id:'dtail',name:'Dovetail',type:'hand',short:'Interlocking trapezoidal joint that resists pulling apart',str:'Exceptional resistance to racking and tension',use:'Drawer boxes, casework corners, box construction',
+   body:'The dovetail is the hallmark of fine hand joinery. Trapezoidal tails on one board interlock with matching pins on the other. Through dovetails show the joint on both faces. Half-blind dovetails hide the joint from one face.',
+   approach:[
+     {method:'Hand Tool',tools:'Dovetail saw, coping saw, chisels, mallet, and marking gauge. A sliding bevel set to your ratio guides the layout.'},
+     {method:'Router Jig',tools:'Router with a dovetail bit and a commercial dovetail jig. Faster but produces uniform spacing only.'},
+   ]},
+  {id:'box',name:'Box Joint (Finger Joint)',type:'both',short:'Interlocking rectangular fingers',str:'Strong in tension when glued',use:'Drawer boxes, small boxes, decorative joinery',
+   body:'The box joint uses evenly spaced rectangular fingers that interlock at right angles.',
+   approach:[
+     {method:'Hand Tool',tools:'Crosscut saw, chisels, and a shop-made indexing jig to keep spacing consistent.'},
+     {method:'Table Saw',tools:'Table saw with a dado stack and a shop-made or commercial box joint jig. Fast and consistent for production runs.'},
+     {method:'Router Table',tools:'Router table with a straight bit and indexing jig. Similar result to the table saw method.'},
+   ]},
+  {id:'hlap',name:'Half-Lap',type:'both',short:'Two pieces halved in thickness and overlapped',str:'Moderate, relies on glue and fasteners',use:'Frame construction, grids, face frames',
+   body:'A half-lap joint removes half the thickness from each piece at the joint location, allowing them to overlap flush.',
+   approach:[
+     {method:'Hand Tool',tools:'Crosscut saw and shoulder plane, or router plane to clean the flat bottom. Layout with a marking gauge.'},
+     {method:'Table Saw',tools:'Table saw with a dado stack. Multiple passes remove the waste cleanly and quickly.'},
+     {method:'Router',tools:'Straight bit in a router with a straightedge guide or router table fence.'},
+   ]},
+  {id:'dado-j',name:'Dado / Housing',type:'both',short:'A channel cut across the grain to receive a shelf or panel',str:'Good in shear; weak in tension without mechanical fasteners',use:'Shelf joinery, cabinet construction, bookcase backs',
+   body:'A dado cut across the grain accepts a shelf or divider at a fixed location.',
+   approach:[
+     {method:'Hand Tool',tools:'Router plane to flatten and size the channel. Chisels and a crosscut saw to define the walls.'},
+     {method:'Table Saw',tools:'Table saw with a dado stack. A sacrificial fence extension helps support narrow workpieces.'},
+     {method:'Router',tools:'Straight bit with a straightedge guide clamped across the panel. Very common for sheet goods.'},
+   ]},
+  {id:'drawbore',name:'Drawbore',type:'hand',short:'Pulls a mortise-and-tenon joint tight without clamps',str:'Reinforces and locks a mortise and tenon permanently',use:'Chair joinery, timber framing',
+   body:'A hole is drilled through the mortise wall and into the tenon, but the hole in the tenon is drilled slightly offset. A tapered wooden peg driven through draws the joint tight.',
+   approach:[
+     {method:'Hand Tool',tools:'Brace and auger or drill for the peg holes. A tapered reamer to size the hole in the tenon. Mallet to drive the peg.'},
+   ]},
+  {id:'pocket',name:'Pocket Screw Joint',type:'power',short:'Angled screw joint using a jig-drilled pocket hole',str:'Moderate, adequate for face frames and cabinet boxes',use:'Face frames, cabinet carcass construction',
+   body:'The pocket screw joint uses a pocket hole jig to drill an angled pocket into one piece, then drives a coarse-threaded self-tapping screw into the mating piece. Fast to cut with no clamping time. Strength comes from the screw, not wood-to-wood geometry.',
+   approach:[
+     {method:'Pocket Hole Jig',tools:'A pocket hole jig (Kreg Jig is the most common) with its stepped drill bit and depth collar. A right-angle clamp holds parts aligned during assembly.'},
+   ]},
 ];
 
 const CLAMPS=[
@@ -1360,10 +1410,10 @@ const LAYOUT=[
 const JOINT_GUIDE={
   questions:[
     {id:'q1',text:'What is the primary stress on this joint?',options:[
-      {text:'Pulling apart (tension)',next:'q2'},
-      {text:'Racking / twisting sideways',next:'q3'},
-      {text:'Shear (sliding)',next:'q4'},
-      {text:'Compression only',next:'q5'},
+      {text:'Pulling apart (tension)',desc:'Parts being pulled in opposite directions, like a chair leg or drawer pull.',next:'q2'},
+      {text:'Racking / twisting sideways',desc:'Side pressure trying to distort the shape, like a door frame or cabinet side.',next:'q3'},
+      {text:'Shear (sliding)',desc:'Parts sliding past each other, like a shelf bearing weight.',next:'q4'},
+      {text:'Compression only',desc:'Parts being pushed together, like a table leg under load.',next:'q5'},
     ]},
     {id:'q2',text:'How visible is the joint?',options:[
       {text:'Hidden / structural only',next:'r-mt'},
@@ -1977,8 +2027,12 @@ function renderJoineryD(id) {
      </div>
      <div class="ds"><h3>Description</h3><p>${j.body}</p></div>
      <div class="ds"><h3>Tool Approach</h3>
-     <p style="font-size:13px;color:var(--il);margin-bottom:8px">This joint can be cut using the following approach. These are descriptive labels, not links.</p>
-     <div class="tr">${j.tags.map(tag => `<span class="ti">${tag}</span>`).join('')}</div></div>`;
+     ${(j.approach||[]).map(a =>
+       `<div style="margin-bottom:10px;padding:10px 12px;background:var(--pp);border-radius:10px;border-left:3px solid var(--pm)">
+         <div style="font-size:11px;font-weight:700;color:var(--ph);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">${a.method}</div>
+         <div style="font-size:13px;color:var(--im);line-height:1.6">${a.tools}</div>
+       </div>`).join('')}
+     </div>`;
 }
 
 // ── CLAMPS ────────────────────────────────────────────────────────
@@ -2280,9 +2334,12 @@ function renderJointGuide(qid) {
     ? `<button class="cb" style="background:var(--cr);color:var(--ph);border:2px solid var(--ph);margin-bottom:8px" onclick="renderJointGuide('${jgHistory[jgHistory.length-1]}')">← Back</button>`
     : '';
   const optionsHtml = q.options.map(o =>
-    `<div class="li" style="cursor:pointer;border-radius:10px;border:2px solid var(--bm);margin-bottom:8px;background:white" onclick="jgHistory.push('${qid}');renderJointGuide('${o.next}')">
-      <div style="flex:1"><div class="lil">${o.text}</div></div>
-      <div class="la">›</div></div>`
+    `<div class="li" style="cursor:pointer;border-radius:10px;border:2px solid var(--bm);margin-bottom:8px;background:white;align-items:flex-start;padding:12px 14px" onclick="jgHistory.push('${qid}');renderJointGuide('${o.next}')">
+      <div style="flex:1">
+        <div class="lil">${o.text}</div>
+        ${o.desc ? `<div class="lis" style="margin-top:3px;line-height:1.45">${o.desc}</div>` : ''}
+      </div>
+      <div class="la" style="margin-top:2px;flex-shrink:0">›</div></div>`
   ).join('');
   container.innerHTML = `
     ${backBtn}
