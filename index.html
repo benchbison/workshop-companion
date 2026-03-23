@@ -999,7 +999,15 @@ const T=[
   {id:'shear',name:'Shear',cat:'joinery-t',
    short:'A force that causes two parts to slide past each other along a plane',
    def:'Shear is a mechanical force in which two connected parts are pushed or pulled in opposite but parallel directions along the same plane, causing them to slide against each other. In woodworking, a shelf bearing a load experiences shear at the joint connecting it to the case side. Dados and housing joints resist shear well because the wood itself carries the load, not just the fastener or glue line.',
-   rel:['dado','mortise'],tags:[{l:'Dado / Housing',f:'dado-j'},{l:'Pocket Hole Jig',f:'pocket-hole-jig'}]}];
+   rel:['dado','mortise'],tags:[{l:'Dado / Housing',f:'dado-j'},{l:'Pocket Hole Jig',f:'pocket-hole-jig'}]},
+  {id:'jig',name:'Jig',cat:'measurement',
+   short:'A shop-made or commercial device that guides a tool to a consistent, repeatable result',
+   def:'A jig is any device that holds a workpiece, guides a cutting tool, or both, in order to produce a repeatable result without requiring the operator to measure or lay out each cut individually. Jigs range from a simple scrap of wood clamped to a bench to commercial precision devices like a pocket hole jig or dovetail jig. The defining characteristic is repeatability: the jig does the layout work once so every subsequent piece comes out identical. Shop-made jigs are a core part of hand-tool and power-tool woodworking and are often built for a single specific task.',
+   rel:['dado','mortise'],tags:[{l:'Pocket Hole Jig',f:'pocket-hole-jig'},{l:'Pocket Hole',f:'pocket-hole'}]},
+  {id:'fixture',name:'Fixture',cat:'measurement',
+   short:'A device that holds a workpiece in position during cutting or assembly',
+   def:'A fixture holds the workpiece still and in the correct position while a tool does its work. Unlike a jig, which guides the tool, a fixture only positions and secures the work. In practice the terms jig and fixture are used interchangeably in the shop. A typical fixture might be a notched board that holds a bowl blank at the correct angle for drilling, or a clamping caul that distributes pressure evenly across a glue-up.',
+   rel:['mortise'],tags:[{l:'Jig',f:'jig'}]}];
 
 const TOOLS=[
   {id:'bench-plane',name:'Bench Plane',cat:'planes',short:'Versatile plane for flattening, smoothing, and dimensioning',use:'Flattening rough boards, reducing thickness, smoothing surfaces, shooting edges',ease:'Moderate, requires proper setup and a sharp iron',terms:[{n:'Chip breaker',id:null},{n:'Mouth',id:null},{n:'Sole',id:null},{n:'Iron',id:null}],types:['#4 Smoother (most versatile)','#5 Jack (rough stock removal)','#7 Jointer (edge jointing)'],tech:'Set the iron for a light cut. Work with the grain. Drive the plane with your body weight, not your arms.'},
