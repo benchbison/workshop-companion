@@ -3113,11 +3113,11 @@ function journalRenderArchive() {
   list.innerHTML = archived.map(e => {
     const preview = e.body.trim().split('\n')[0].substring(0,55) || '(empty)';
     return `<div style="padding:11px 14px;border-bottom:1px solid var(--bd)">
-      <div class="nj-entry-date">\${journalFormatDate(e.modified)}</div>
-      <div class="nj-entry-preview" style="margin-bottom:8px">\${preview}</div>
+      <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
+      <div class="nj-entry-preview" style="margin-bottom:8px">${preview}</div>
       <div style="display:flex;gap:6px">
-        <button data-restore="\${e.id}" style="flex:1;background:var(--ph);color:white;border:none;border-radius:6px;padding:6px 8px;font-family:var(--ss);font-size:12px;cursor:pointer">Restore</button>
-        <button data-del="\${e.id}" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;border-radius:6px;padding:6px 8px;font-family:var(--ss);font-size:12px;cursor:pointer">Delete</button>
+        <button data-restore="${e.id}" style="flex:1;background:var(--ph);color:white;border:none;border-radius:6px;padding:6px 8px;font-family:var(--ss);font-size:12px;cursor:pointer">Restore</button>
+        <button data-del="${e.id}" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;border-radius:6px;padding:6px 8px;font-family:var(--ss);font-size:12px;cursor:pointer">Delete</button>
       </div>
     </div>`;
   }).join('');
