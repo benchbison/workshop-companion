@@ -300,7 +300,7 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
     </div>
     <div style="padding:8px 12px;display:flex;gap:8px;flex-shrink:0;border-top:1px solid var(--bd)">
       <button id="nj-save" style="flex:1;background:var(--ph);color:white;border:none;border-radius:8px;padding:9px;font-family:var(--ss);font-size:13px;font-weight:600;cursor:pointer">Save</button>
-      <button id="nj-delete" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">Delete</button>
+      <button id="nj-archive" style="background:transparent;color:var(--am);border:1.5px solid var(--am);border-radius:8px;padding:9px 10px;font-family:var(--ss);font-size:13px;cursor:pointer" title="Move to archive">Archive</button>
       <button id="nj-back" style="background:transparent;color:var(--il);border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-family:var(--ss);font-size:13px;cursor:pointer">← Back</button>
     </div>
     <p id="nj-saved-msg" style="text-align:center;font-size:11px;color:var(--pm);padding:4px 0 6px;opacity:0;transition:opacity 0.3s">Saved.</p>
@@ -311,8 +311,19 @@ video#cs{width:100%;border-radius:10px;display:none;margin-bottom:10px;}
       <button id="nj-new" style="width:100%;background:var(--ph);color:white;border:none;border-radius:8px;padding:10px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer">+ New Entry</button>
     </div>
     <div id="nj-list" style="flex:1;overflow-y:auto;padding:0 0 8px"></div>
+    <div style="padding:8px 12px;border-top:1px solid var(--bd);flex-shrink:0;display:flex;gap:8px">
+      <button id="nj-export" style="flex:1;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">Export All</button>
+      <button id="nj-archive-view" style="background:transparent;color:var(--il);border:1.5px solid var(--bd);border-radius:8px;padding:8px 10px;font-family:var(--ss);font-size:13px;cursor:pointer" title="View archived entries">Archive</button>
+    </div>
+  </div>
+  <!-- Archive view (shown when browsing archived entries) -->
+  <div id="nj-archive-view-panel" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+    <div style="padding:10px 12px 6px;flex-shrink:0;border-bottom:1px solid var(--bd)">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--il)">Archived Entries</div>
+    </div>
+    <div id="nj-archive-list" style="flex:1;overflow-y:auto;padding:0 0 8px"></div>
     <div style="padding:8px 12px;border-top:1px solid var(--bd);flex-shrink:0">
-      <button id="nj-export" style="width:100%;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">Export All Notes</button>
+      <button id="nj-archive-back" style="width:100%;background:transparent;color:var(--ph);border:1.5px solid var(--ph);border-radius:8px;padding:8px;font-family:var(--ss);font-size:13px;font-weight:500;cursor:pointer">← Back to Notes</button>
     </div>
   </div>
 </aside>
@@ -2989,6 +3000,7 @@ function journalRenderList() {
     return;
   }
   list.innerHTML = journalEntries
+    .filter(e => !e.archived)
     .slice().sort((a,b) => b.modified - a.modified)
     .map(e => {
       const preview = e.body.trim().split('\n')[0].substring(0,60) || '(empty)';
@@ -2997,13 +3009,13 @@ function journalRenderList() {
           <div class="nj-entry-date">${journalFormatDate(e.modified)}</div>
           <div class="nj-entry-preview">${preview}</div>
         </div>
-        <button data-del="${e.id}" style="flex-shrink:0;background:none;border:none;color:#aaa;font-size:18px;cursor:pointer;padding:0 4px;line-height:1;margin-top:2px" aria-label="Delete entry">&#10005;</button>
+        <button data-arc="${e.id}" style="flex-shrink:0;background:none;border:none;color:#aaa;font-size:15px;cursor:pointer;padding:0 4px;line-height:1;margin-top:2px" aria-label="Archive entry" title="Archive">&#8943;</button>
       </div>`;
     }).join('');
   list.onclick = function(ev) {
     const openEl = ev.target.closest('[data-open]');
-    const delEl  = ev.target.closest('[data-del]');
-    if (delEl)  journalDeleteEntry(delEl.dataset.del);
+    const arcEl  = ev.target.closest('[data-arc]');
+    if (arcEl)  journalArchiveEntry(arcEl.dataset.arc);
     else if (openEl) journalOpenEntry(openEl.dataset.open);
   };
 }
@@ -3041,23 +3053,79 @@ function journalSaveEntry() {
   if (msg) { msg.style.opacity = '1'; setTimeout(() => msg.style.opacity = '0', 1800); }
 }
 
+function journalArchiveEntry(id) {
+  const targetId = id || activeEntryId;
+  if (!targetId) return;
+  const entry = journalEntries.find(e => e.id === targetId);
+  if (!entry) return;
+  const preview = entry.body.trim().split('\n')[0].substring(0,40) || 'empty entry';
+  if (!confirm('Archive "' + preview + '"?\n\nYou can restore or permanently delete it from the Archive view.')) return;
+  entry.archived = true;
+  entry.archivedAt = Date.now();
+  journalSave();
+  if (targetId === activeEntryId) journalBackToList();
+  else journalRenderList();
+}
+
 function journalDeleteEntry(id) {
   const targetId = id || activeEntryId;
   if (!targetId) return;
   const entry = journalEntries.find(e => e.id === targetId);
   const preview = entry ? (entry.body.trim().split('\n')[0].substring(0,40) || 'empty entry') : 'this entry';
-  if (!confirm('Delete "' + preview + '"?\n\nThis cannot be undone.')) return;
+  if (!confirm('Permanently delete "' + preview + '"?\n\nThis cannot be undone.')) return;
   journalEntries = journalEntries.filter(e => e.id !== targetId);
   journalSave();
-  if (targetId === activeEntryId) journalBackToList();
-  else journalRenderList();
+  journalRenderArchive();
+}
+
+function journalRestoreEntry(id) {
+  const entry = journalEntries.find(e => e.id === id);
+  if (!entry) return;
+  entry.archived = false;
+  delete entry.archivedAt;
+  journalSave();
+  journalRenderArchive();
 }
 
 function journalBackToList() {
   activeEntryId = null;
   document.getElementById('nj-editor').style.display = 'none';
   document.getElementById('nj-list-view').style.display = 'flex';
+  document.getElementById('nj-archive-view-panel').style.display = 'none';
   journalRenderList();
+}
+
+function journalShowArchive() {
+  document.getElementById('nj-list-view').style.display = 'none';
+  document.getElementById('nj-archive-view-panel').style.display = 'flex';
+  journalRenderArchive();
+}
+
+function journalRenderArchive() {
+  const list = document.getElementById('nj-archive-list');
+  if (!list) return;
+  const archived = journalEntries.filter(e => e.archived).sort((a,b) => (b.archivedAt||0) - (a.archivedAt||0));
+  if (!archived.length) {
+    list.innerHTML = '<div class="nj-empty">No archived entries.</div>';
+    return;
+  }
+  list.innerHTML = archived.map(e => {
+    const preview = e.body.trim().split('\n')[0].substring(0,55) || '(empty)';
+    return `<div style="padding:11px 14px;border-bottom:1px solid var(--bd)">
+      <div class="nj-entry-date">\${journalFormatDate(e.modified)}</div>
+      <div class="nj-entry-preview" style="margin-bottom:8px">\${preview}</div>
+      <div style="display:flex;gap:6px">
+        <button data-restore="\${e.id}" style="flex:1;background:var(--ph);color:white;border:none;border-radius:6px;padding:6px 8px;font-family:var(--ss);font-size:12px;cursor:pointer">Restore</button>
+        <button data-del="\${e.id}" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;border-radius:6px;padding:6px 8px;font-family:var(--ss);font-size:12px;cursor:pointer">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+  list.onclick = function(ev) {
+    const restoreEl = ev.target.closest('[data-restore]');
+    const delEl     = ev.target.closest('[data-del]');
+    if (restoreEl) journalRestoreEntry(restoreEl.dataset.restore);
+    else if (delEl) journalDeleteEntry(delEl.dataset.del);
+  };
 }
 
 function journalExport() {
@@ -3095,6 +3163,12 @@ function journalInit() {
       saveTimer = setTimeout(journalSaveEntry, 1500);
     });
   }
+  const archiveBtn = document.getElementById('nj-archive');
+  if (archiveBtn) archiveBtn.addEventListener('click', () => journalArchiveEntry());
+  const archiveViewBtn = document.getElementById('nj-archive-view');
+  if (archiveViewBtn) archiveViewBtn.addEventListener('click', journalShowArchive);
+  const archiveBackBtn = document.getElementById('nj-archive-back');
+  if (archiveBackBtn) archiveBackBtn.addEventListener('click', journalBackToList);
 }
 // Inline-safe disclaimer accept, called directly from onclick</script>
 
