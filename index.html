@@ -3163,6 +3163,14 @@ function journalInit() {
       saveTimer = setTimeout(journalSaveEntry, 1500);
     });
   }
+  const newBtn = document.getElementById('nj-new');
+  if (newBtn) newBtn.addEventListener('click', journalNewEntry);
+  const saveBtn = document.getElementById('nj-save');
+  if (saveBtn) saveBtn.addEventListener('click', journalSaveEntry);
+  const backBtn = document.getElementById('nj-back');
+  if (backBtn) backBtn.addEventListener('click', journalBackToList);
+  const exportBtn = document.getElementById('nj-export');
+  if (exportBtn) exportBtn.addEventListener('click', journalExport);
   const archiveBtn = document.getElementById('nj-archive');
   if (archiveBtn) archiveBtn.addEventListener('click', () => journalArchiveEntry());
   const archiveViewBtn = document.getElementById('nj-archive-view');
