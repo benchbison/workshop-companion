@@ -2429,6 +2429,12 @@ function tog(i) {
 }
 function openL(url) { window.open(url, '_blank', 'noopener'); }
 
+// ── JOURNAL STATE (must be declared before safeRender calls) ─────
+const JOURNAL_KEY = 'bb_journal_v1';
+const LEGACY_KEY  = 'bb_notes';
+let journalEntries = [];
+let activeEntryId  = null;
+
 // ── INIT ──────────────────────────────────────────────────────────
 safeRender(renderTerms,          'terms');
 safeRender(renderTools,          'tools');
@@ -2957,11 +2963,6 @@ function safeRender(fn, label) {
 }
 
 // ── WORKSHOP JOURNAL ─────────────────────────────────────────────
-const JOURNAL_KEY = 'bb_journal_v1';
-const LEGACY_KEY  = 'bb_notes';
-let journalEntries = [];
-let activeEntryId  = null;
-
 function journalLoad() {
   try {
     const raw = localStorage.getItem(JOURNAL_KEY);
