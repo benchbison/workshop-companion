@@ -2481,6 +2481,7 @@ safeRender(renderFinishSchedules,'finish-schedules');
 safeRender(renderHardware,       'hardware');
 safeRender(renderGreenWood,      'green-wood');
 try { SEARCH_IDX = buildSearchIndex(); } catch(e) { console.warn('Search index failed:', e.message); }
+try { document.querySelectorAll('.bcb').forEach(el => { el.innerHTML = linkify(el.innerHTML); }); } catch(e) {}
 safeRender(initAboutLogo,        'logo');
 safeRender(initDisclaimer,       'disclaimer');
 safeRender(journalInit,          'journal');
