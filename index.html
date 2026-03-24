@@ -2053,6 +2053,7 @@ document.getElementById('logo-img').src = 'data:image/png;base64,' + LOGO;
 
 // ── STATE ──────────────────────────────────────────────────────────
 let hist=['home'], cur='home', menuO=false, notesO=false, searchO=false, camS=null;
+window.history.replaceState({pg:'home', data:null}, '');
 
 // ── NAVIGATION ────────────────────────────────────────────────────
 function go(pg, data) {
@@ -2096,14 +2097,14 @@ function go(pg, data) {
     document.getElementById('pg-terms').classList.add('active');
     setTimeout(() => filtTerms(data.f), 10);
     window.scrollTo(0, 0);
-    if (pg !== cur) { hist.push(pg); cur = pg; }
+    if (pg !== cur) { hist.push(pg); cur = pg; window.history.pushState({pg, data}, ''); }
     document.getElementById('bb').disabled = hist.length <= 1;
     return;
   }
 
   const el = document.getElementById('pg-' + pg);
   if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
-  if (pg !== cur) { hist.push(pg); cur = pg; }
+  if (pg !== cur) { hist.push(pg); cur = pg; window.history.pushState({pg, data}, ''); }
   document.getElementById('bb').disabled = hist.length <= 1;
 }
 
@@ -2113,6 +2114,20 @@ document.getElementById('bb').addEventListener('click', () => {
     hist.pop();
     const prev = hist[hist.length - 1];
     cur = prev;
+    document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+    const el = document.getElementById('pg-' + prev);
+    if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
+    document.getElementById('bb').disabled = hist.length <= 1;
+  }
+});
+
+// Phone/browser native back button
+window.addEventListener('popstate', () => {
+  if (hist.length > 1) {
+    hist.pop();
+    const prev = hist[hist.length - 1];
+    cur = prev;
+    closeAll();
     document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
     const el = document.getElementById('pg-' + prev);
     if (el) { el.classList.add('active'); window.scrollTo(0, 0); }
